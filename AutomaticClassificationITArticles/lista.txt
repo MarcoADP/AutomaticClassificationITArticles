@@ -1,0 +1,134 @@
+Artificial Intelligence
+General
+Cognitive simulation
+Philosophical foundations
+Applications and Expert Knowledge Intensive Systems
+Cartography
+Computer vision
+Decision support
+Education
+Environment
+Games and infotainment
+Industrial automation
+Law
+Mathematics
+Medicine and science
+Military
+Natural language interfaces
+Office automation
+Space
+Transportation
+Automatic Programming
+Automatic analysis of algorithms
+Program modification
+Program synthesis
+Program transformation
+Program verification
+Deduction and Theorem Proving and Knowledge Processing
+Answer/reason extraction
+Constraint-based processing
+Deduction
+Inference engines
+Logic processing
+Logic programming
+Mathematical induction
+Metatheory
+Nonmonotonic reasoning and belief revision
+Resolution
+Rule-based processing
+Uncertainty, “fuzzy,” and probabilistic reasoning
+Knowledge Representation Formalisms and Methods
+Agent communication languages
+Distributed representations
+Frames and scripts
+Knowledge base management
+Knowledge base verification
+Modal logic
+Predicate logic
+Relation systems
+Representation languages
+Representations (procedural and rulebased)
+Semantic networks
+Storage mechanisms
+Temporal logic
+Programming Languages and Software
+Expert and knowledge-intensive system tools and techniques
+Learning
+Analogies
+Concept learning
+Connectionism and neural nets
+Heuristics design
+Induction
+Knowledge acquisition
+Machine learning
+Language acquisition
+Parameter learning
+Natural Language Processing
+Discourse
+Language generation
+Language models
+Language parsing and understanding
+Language summarization
+Machine translation
+Speech recognition and synthesis
+Text analysis
+Web text analysis
+Problem Solving, Control Methods, and Search
+Backtracking
+Constraint satisfaction
+Control theory
+Dynamic programming
+Graph and tree search strategies
+Heuristic methods
+Plan execution, formation, and generation
+Scheduling
+Robotics
+Autonomous vehicles
+Biorobotics
+Commercial robots and applications
+Kinematics and dynamics
+Manipulators
+Nanorobots
+Neuromorphic computing
+Operator interfaces
+Propelling mechanisms
+Sensors
+Workcell organization and planning
+Vision
+Vision and Scene Understanding
+3D/stereo scene analysis
+Architecture and control structures
+Intensity, color, photometry, and thresholding
+Modeling and recovery of physical attributes
+Motion
+Perceptual reasoning
+Representations, data structures, and transforms
+Shape
+Texture
+Video analysis
+Distributed Artificial Intelligence
+Coherence and coordination
+Intelligent agents
+Languages and structures
+Multiagent systems
+Intelligent Web Services and Semantic Web
+Intelligent Web service languages
+Internet reasoning services
+Ontology design
+Ontology languages
+Knowledge Management
+Knowledge acquisition
+Knowledge engineering methodologies
+Knowledge life cycles
+Knowledge maintenance
+Knowledge modeling
+Knowledge personalization and customization
+Knowledge publishing
+Knowledge retrieval
+Knowledge reuse
+Knowledge valuation
+Miscellaneous
+Adaptive hypermedia
+Computational neuroscience
+Evolutionary computing and genetic algorithms
+Wearable AI
