@@ -1,0 +1,60 @@
+
+.text {
+     -fx-font-smoothing-type: gray;
+ }
+
+.drag-pane {
+    drag-pane-border-color: rgb(220, 220, 220);
+    -fx-background-color: white;
+    -fx-border-color: drag-pane-border-color;
+    -fx-border-width: 6;
+    -fx-border-style: segments(15) line-cap square;
+}
+
+.border-pane {
+    -fx-background-color: derive(lightgray, 20%);
+}
+
+.painel {
+    -fx-border-color: #a8a8a8;
+    -fx-border-width: 1;
+    -fx-background-color: #F2F2F2;
+}
+
+.h1 {
+    -fx-font-size: 28;
+}
+
+.h2 {
+    -fx-font-size: 18;
+}
+
+.label-result {
+    -fx-font-size: 1;
+    -fx-text-fill: green;
+}
+
+.btn-primary {
+    -fx-background-color: transparent, linear-gradient(#4081DD, #3668c1);
+    -fx-background-radius: 4px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-color: #63aaef;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;
+}
+
+.btn-primary:hover {
+    -fx-background-color: transparent, linear-gradient(#418be8, #3672cb);
+}
+
+.btn-primary:armed {
+    -fx-background-color: transparent, linear-gradient(#407bd7, #376cc6);
+}
+
+.btn-primary:focused {
+    -fx-background-radius: 0;
+    -fx-effect: dropshadow(gaussian, #3d7fdf, 3, 0.1, 0, 0);
+}
+
+

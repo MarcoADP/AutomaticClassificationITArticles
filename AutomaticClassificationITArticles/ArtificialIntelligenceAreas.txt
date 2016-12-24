@@ -1,0 +1,134 @@
+I.2 Artificial Intelligence
+I.2.0 General
+I.2.0.a Cognitive simulation
+I.2.0.b Philosophical foundations
+I.2.1 Applications and Expert Knowledge Intensive Systems
+I.2.1.a Cartography
+I.2.1.b Computer vision
+I.2.1.c Decision support
+I.2.1.d Education
+I.2.1.e Environment
+I.2.1.f Games and infotainment
+I.2.1.g Industrial automation
+I.2.1.h Law
+I.2.1.i Mathematics
+I.2.1.j Medicine and science
+I.2.1.k Military
+I.2.1.l Natural language interfaces
+I.2.1.m Office automation
+I.2.1.n Space
+I.2.1.o Transportation
+I.2.2 Automatic Programming
+I.2.2.a Automatic analysis of algorithms
+I.2.2.b Program modification
+I.2.2.c Program synthesis
+I.2.2.d Program transformation
+I.2.2.e Program verification
+I.2.3 Deduction and Theorem Proving and Knowledge Processing
+I.2.3.a Answer/reason extraction
+I.2.3.b Constraint-based processing
+I.2.3.c Deduction
+I.2.3.d Inference engines
+I.2.3.e Logic processing
+I.2.3.f Logic programming
+I.2.3.g Mathematical induction
+I.2.3.h Metatheory
+I.2.3.i Nonmonotonic reasoning and belief revision
+I.2.3.j Resolution
+I.2.3.k Rule-based processing
+I.2.3.l Uncertainty, “fuzzy,” and probabilistic reasoning
+I.2.4 Knowledge Representation Formalisms and Methods
+I.2.4.a Agent communication languages
+I.2.4.b Distributed representations
+I.2.4.c Frames and scripts
+I.2.4.d Knowledge base management
+I.2.4.e Knowledge base verification
+I.2.4.f Modal logic
+I.2.4.g Predicate logic
+I.2.4.h Relation systems
+I.2.4.i Representation languages
+I.2.4.j Representations (procedural and rulebased)
+I.2.4.k Semantic networks
+I.2.4.l Storage mechanisms
+I.2.4.m Temporal logic
+I.2.5 Programming Languages and Software
+I.2.5.a Expert and knowledge-intensive system tools and techniques
+I.2.6 Learning
+I.2.6.a Analogies
+I.2.6.b Concept learning
+I.2.6.c Connectionism and neural nets
+I.2.6.d Heuristics design
+I.2.6.e Induction
+I.2.6.f Knowledge acquisition
+I.2.6.g Machine learning
+I.2.6.h Language acquisition
+I.2.6.i Parameter learning
+I.2.7 Natural Language Processing
+I.2.7.a Discourse
+I.2.7.b Language generation
+I.2.7.c Language models
+I.2.7.d Language parsing and understanding
+I.2.7.e Language summarization
+I.2.7.f Machine translation
+I.2.7.g Speech recognition and synthesis
+I.2.7.h Text analysis
+I.2.7.i Web text analysis
+I.2.8 Problem Solving, Control Methods, and Search
+I.2.8.a Backtracking
+I.2.8.b Constraint satisfaction
+I.2.8.c Control theory
+I.2.8.d Dynamic programming
+I.2.8.e Graph and tree search strategies
+I.2.8.f Heuristic methods
+I.2.8.g Plan execution, formation, and generation
+I.2.8.h Scheduling
+I.2.9 Robotics
+I.2.9.a Autonomous vehicles
+I.2.9.b Biorobotics
+I.2.9.c Commercial robots and applications
+I.2.9.d Kinematics and dynamics
+I.2.9.e Manipulators
+I.2.9.f Nanorobots
+I.2.9.g Neuromorphic computing
+I.2.9.h Operator interfaces
+I.2.9.i Propelling mechanisms
+I.2.9.j Sensors
+I.2.9.k Workcell organization and planning
+I.2.9.l Vision
+I.2.10 Vision and Scene Understanding
+I.2.10.a 3D/stereo scene analysis
+I.2.10.b Architecture and control structures
+I.2.10.c Intensity, color, photometry, and thresholding
+I.2.10.d Modeling and recovery of physical attributes
+I.2.10.e Motion
+I.2.10.f Perceptual reasoning
+I.2.10.g Representations, data structures, and transforms
+I.2.10.h Shape
+I.2.10.i Texture
+I.2.10.j Video analysis
+I.2.11 Distributed Artificial Intelligence
+I.2.11.a Coherence and coordination
+I.2.11.b Intelligent agents
+I.2.11.c Languages and structures
+I.2.11.d Multiagent systems
+I.2.12 Intelligent Web Services and Semantic Web
+I.2.12.a Intelligent Web service languages
+I.2.12.b Internet reasoning services
+I.2.12.c Ontology design
+I.2.12.d Ontology languages
+I.2.13 Knowledge Management
+I.2.13.a Knowledge acquisition
+I.2.13.b Knowledge engineering methodologies
+I.2.13.c Knowledge life cycles
+I.2.13.d Knowledge maintenance
+I.2.13.e Knowledge modeling
+I.2.13.f Knowledge personalization and customization
+I.2.13.g Knowledge publishing
+I.2.13.h Knowledge retrieval
+I.2.13.i Knowledge reuse
+I.2.13.j Knowledge valuation
+I.2.m Miscellaneous
+I.2.m.a Adaptive hypermedia
+I.2.m.b Computational neuroscience
+I.2.m.c Evolutionary computing and genetic algorithms
+I.2.m.d Wearable AI
