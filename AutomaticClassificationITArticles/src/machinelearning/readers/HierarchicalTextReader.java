@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class HierarchicalTextReader {
 
-
     public static BufferedReader openTXT(String dir) throws FileNotFoundException {
         FileReader arq = new FileReader("lista.txt");
         return (new BufferedReader(arq));

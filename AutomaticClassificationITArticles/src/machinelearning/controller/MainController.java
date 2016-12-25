@@ -9,13 +9,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import machinelearning.Main;
-import machinelearning.util.ColorStyleTransition;
 
 import java.io.IOException;
 
@@ -25,33 +22,18 @@ public class MainController {
     private BorderPane borderPane;
 
     @FXML
-    private AnchorPane dragPane;
+    private DragDropController dragDropController;
 
     @FXML
     private SobreController sobreController;
 
     public static MainController INSTANCE;
 
-
-    private ColorStyleTransition cst;
-
-
     @FXML
     private void initialize() {
         INSTANCE = this;
 
         sobreController = inicializarController("../view/sobre.fxml");
-
-        initBorderAnimation();
-    }
-
-    private void initBorderAnimation() {
-        cst = new ColorStyleTransition(0.3);
-        cst.setPane(dragPane);
-        cst.setStyleName("drag-pane-border-color");
-        cst.setStart(Color.rgb(220, 220, 220));
-        cst.setEnd(Color.rgb(12, 112, 223));
-
     }
 
     @FXML
@@ -69,42 +51,6 @@ public class MainController {
         sobre.showAndWait();
     }
 
-    @FXML
-    private void handleDragDone() {
-        System.out.println("done");
-    }
-
-    @FXML
-    private void handleDragDropped() {
-        System.out.println("dropped");
-    }
-
-    @FXML
-    private void handleDragEntered() {
-        fadeInBorderDrag();
-    }
-
-    @FXML
-    private void handleDragExited() {
-        fadeOutBorderDrag();
-    }
-
-    @FXML
-    private void handleDragOver() {
-
-    }
-
-    private void fadeInBorderDrag() {
-        cst.setStart(Color.rgb(220, 220, 220));
-        cst.setEnd(Color.rgb(77, 64, 185));
-        cst.play();
-    }
-
-    private void fadeOutBorderDrag() {
-        cst.setStart(Color.rgb(77, 64, 185));
-        cst.setEnd(Color.rgb(220, 220, 220));
-        cst.play();
-    }
 
     public void proximaTela(Pane novo) {
         mostrarTela(novo, 1);

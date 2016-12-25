@@ -7,12 +7,17 @@
     drag-pane-border-color: rgb(220, 220, 220);
     -fx-background-color: white;
     -fx-border-color: drag-pane-border-color;
-    -fx-border-width: 6;
-    -fx-border-style: segments(15) line-cap square;
+    -fx-border-width: 3;
+    -fx-border-style: segments(8) line-cap square;
+}
+
+.drag-label {
+    drag-label-color: #cccccc;
+    -fx-text-fill: drag-label-color;
 }
 
 .border-pane {
-    -fx-background-color: derive(lightgray, 20%);
+    /*-fx-background-color: derive(lightgray, 20%);*/
 }
 
 .painel {
