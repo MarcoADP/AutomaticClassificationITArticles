@@ -1,5 +1,6 @@
 package machinelearning.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
@@ -10,11 +11,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import machinelearning.readers.PDFReader;
 import machinelearning.util.ColorStyleTransition;
-import org.apache.pdfbox.pdmodel.PDDocument;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DragDropController {
 
@@ -23,7 +24,6 @@ public class DragDropController {
 
     @FXML
     private Label labelDrag;
-
 
     private ColorStyleTransition cstBorder;
     private ColorStyleTransition cstLabel;
@@ -48,42 +48,6 @@ public class DragDropController {
     }
 
     @FXML
-    private void handleDragDropped(DragEvent dragEvent) {
-        List<File> files = dragEvent.getDragboard().getFiles();
-        System.out.println("Got " + files.size() + " files");
-        for (File file : files) {
-            System.out.println(file);
-            if (file.isDirectory()) {
-                System.out.println("DIRETÓRIO");
-                for (String s : file.list()) {
-                    System.out.println(s);
-                }
-            } else {
-                try {
-                    PDDocument pd = PDFReader.openPDF(file.getAbsolutePath());
-                    System.out.println(PDFReader.getText(pd));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        dragEvent.consume();
-    }
-
-    @FXML
-    private void handleDragEntered() {
-        fadeInBorderDrag();
-
-    }
-
-    @FXML
-    private void handleDragExited() {
-        fadeOutBorderDrag();
-
-    }
-
-    @FXML
     private void handleDragOver(DragEvent dragEvent) {
         if (dragEvent.getDragboard().hasFiles()) {
             dragEvent.acceptTransferModes(TransferMode.ANY);
@@ -91,29 +55,50 @@ public class DragDropController {
         dragEvent.consume();
     }
 
-    private void fadeInBorderDrag() {
+    @FXML
+    private void handleDragDropped(DragEvent dragEvent) {
+        List<File> files = dragEvent.getDragboard().getFiles();
+
+        if (files.size() == 1 && files.get(0).isDirectory()) {
+            sendFiles(Arrays.asList(files.get(0).listFiles()));
+        } else {
+            sendFiles(files);
+        }
+
+        dragEvent.consume();
+    }
+
+    @FXML
+    private void handleDragEntered() {
         cstBorder.play();
         cstLabel.play();
     }
 
-    private void fadeOutBorderDrag() {
+    @FXML
+    private void handleDragExited() {
         cstBorder.playInverse();
         cstLabel.playInverse();
-    }
-
-    public static String getFileExtension(String fullName) {
-        String fileName = new File(fullName).getName();
-        int dotIndex = fileName.lastIndexOf('.');
-        return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
     }
 
     @FXML
     private void handleMouseClick(MouseEvent mouseEvent) {
         FileChooser fileChooser = new FileChooser();
+
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-        System.out.println(fileChooser.showOpenMultipleDialog(null));
-        //if list != null
+
+        List<File> files = fileChooser.showOpenMultipleDialog(null);
+
+        if (files != null) {
+            sendFiles(files);
+        }
+    }
+
+    private void sendFiles(List<File> files) {
+        List<File> pdfFiles = files.stream().filter(PDFReader::isPDF).collect(Collectors.toList());
+
+        Platform.runLater(() -> MainController.INSTANCE.addFilesToTable(pdfFiles));
     }
 
 }

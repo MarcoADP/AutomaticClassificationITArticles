@@ -5,13 +5,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 
 public class Main extends Application {
 
     public static final String TITULO = "Article Classification";
-    public static final int LARGURA = 550;
-    public static final int ALTURA = 280;
+    public static final int LARGURA = 750;
+    public static final int ALTURA = 600;
 
     private Stage stage;
 
@@ -44,6 +45,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+
 
 //        //LEITURA TXT
 //        BufferedReader lerArq = PDFReader.openTXT("lista.txt");

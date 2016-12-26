@@ -6,37 +6,39 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="border-pane" stylesheets="@app.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="machinelearning.controller.MainController">
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            styleClass="border-pane" stylesheets="@app.css" xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="machinelearning.controller.MainController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="Arquivo">
                     <items>
-                        <SeparatorMenuItem />
-                        <MenuItem mnemonicParsing="false" onAction="#handleMenuItemSair" text="Sair" />
+                        <SeparatorMenuItem/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuItemSair" text="Sair"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ajuda">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleMenuItemSobre" text="Sobre" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuItemSobre" text="Sobre"/>
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
     </top>
     <center>
-
-    </center>
-    <center>
-        <VBox BorderPane.alignment="CENTER">
-            <children>
-                <fx:include fx:id="dragDrop" source="dragdrop.fxml" VBox.vgrow="ALWAYS" />
-            </children>
+        <BorderPane>
+            <top>
+                <fx:include fx:id="dragDrop" source="dragdrop.fxml"/>
+            </top>
+            <center>
+                <fx:include fx:id="fileTable" source="filetable.fxml" BorderPane.alignment="CENTER"/>
+            </center>
             <BorderPane.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </BorderPane.margin>
-        </VBox>
+        </BorderPane>
     </center>
 </BorderPane>

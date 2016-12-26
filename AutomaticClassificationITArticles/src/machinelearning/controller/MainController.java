@@ -14,7 +14,9 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import machinelearning.Main;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class MainController {
 
@@ -23,7 +25,8 @@ public class MainController {
 
     @FXML
     private DragDropController dragDropController;
-
+    @FXML
+    private FileTableController fileTableController;
     @FXML
     private SobreController sobreController;
 
@@ -34,6 +37,25 @@ public class MainController {
         INSTANCE = this;
 
         sobreController = inicializarController("../view/sobre.fxml");
+    }
+
+    public void addFilesToTable(List<File> files) {
+        int addedFiles = fileTableController.addFiles(files);
+
+        String message;
+        if (addedFiles == 0) {
+            message = "Nenhum arquivo novo adicionado.";
+        } else if (addedFiles == 1) {
+            message = "1 arquivo novo adicionado.";
+        } else {
+            message = addedFiles + " arquivos novos adicionados.";
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Arquivos adicionados");
+        alert.setHeaderText(message);
+        alert.setContentText(null);
+        alert.showAndWait();
     }
 
     @FXML

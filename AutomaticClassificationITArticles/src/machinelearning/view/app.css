@@ -3,6 +3,14 @@
      -fx-font-smoothing-type: gray;
  }
 
+.border-pane {
+    /*-fx-background-color: derive(lightgray, 20%);*/
+}
+
+/******************
+  DRAG DROP PANE
+*******************/
+
 .drag-pane {
     drag-pane-border-color: rgb(220, 220, 220);
     -fx-background-color: white;
@@ -16,14 +24,19 @@
     -fx-text-fill: drag-label-color;
 }
 
-.border-pane {
-    /*-fx-background-color: derive(lightgray, 20%);*/
-}
+/******************
+    TABLE VIEW
+*******************/
+
+
+
+
 
 .painel {
     -fx-border-color: #a8a8a8;
     -fx-border-width: 1;
     -fx-background-color: #F2F2F2;
+    /*-fx-background-color: #cbdce1;*/
 }
 
 .h1 {

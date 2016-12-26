@@ -6,7 +6,7 @@ import javafx.scene.layout.VBox;
 public class SobreController {
 
     @FXML
-    private VBox root;
+    private VBox rootPane;
 
     @FXML
     private void initialize() {
@@ -14,6 +14,6 @@ public class SobreController {
     }
 
     public VBox getRoot() {
-        return root;
+        return rootPane;
     }
 }
