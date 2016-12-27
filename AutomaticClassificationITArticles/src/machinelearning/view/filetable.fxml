@@ -13,9 +13,10 @@
         <Label styleClass="h2" text="Tabela de arquivos"/>
         <TableView fx:id="tableFiles" prefHeight="200.0" prefWidth="450.0" VBox.vgrow="ALWAYS" editable="true">
             <columns>
-                <TableColumn fx:id="tableColumnCheckBox" prefWidth="40.0"  editable="true"/>
-                <TableColumn fx:id="tableColumnFile" prefWidth="300.0" text="Caminho do Arquivo" />
-                <TableColumn fx:id="tableColumnClassificacao" prefWidth="150" text="Classificação" style="-fx-alignment: center"/>
+                <TableColumn fx:id="tableColumnCheckBox" prefWidth="40.0" editable="true"/>
+                <TableColumn fx:id="tableColumnFile" prefWidth="300.0" text="Caminho do Arquivo"/>
+                <TableColumn fx:id="tableColumnClassificacao" prefWidth="150" text="Classificação"
+                             styleClass="label-result" style="-fx-alignment: center"/>
                 <TableColumn fx:id="tableColumnProgresso" prefWidth="150" text="Progresso"/>
                 <TableColumn fx:id="tableColumnStatus" prefWidth="100" text="Status" style="-fx-alignment: center"/>
             </columns>

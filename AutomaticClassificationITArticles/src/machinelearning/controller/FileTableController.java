@@ -20,15 +20,14 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class FileTableController {
 
     @FXML
     private VBox rootPane;
+
     @FXML
     private TableView<ClassificationTask> tableFiles;
-
     @FXML
     private TableColumn<ClassificationTask, Boolean> tableColumnCheckBox;
     @FXML
@@ -59,15 +58,16 @@ public class FileTableController {
     private IntegerProperty numTotalAnalisados = new SimpleIntegerProperty(0);
     private BooleanProperty tasksRunning = new SimpleBooleanProperty(false);
 
+    private ExecutorService executor;
 
     @FXML
     private void initialize() {
         tableFiles.setItems(files);
-        initBindings();
-        initTableColumns();
+        configBindings();
+        configTable();
     }
 
-    private void initBindings() {
+    private void configBindings() {
         IntegerBinding filesSizeBinding = Bindings.size(files);
         IntegerBinding selectedFilesSizeBinding = Bindings.size(selectedFiles);
 
@@ -79,7 +79,7 @@ public class FileTableController {
         btnCancelar.disableProperty().bind(tasksRunning.not());
     }
 
-    private void initTableColumns() {
+    private void configTable() {
         tableColumnCheckBox.setCellValueFactory(new PropertyValueFactory<>("selecionado"));
         tableColumnCheckBox.setCellFactory(CheckBoxTableCell.forTableColumn(tableColumnCheckBox));
 
@@ -115,7 +115,7 @@ public class FileTableController {
 
     @FXML
     private void handleBtnAnalisar() {
-        ExecutorService executor = Executors.newSingleThreadExecutor(r -> {
+        executor = Executors.newSingleThreadExecutor(r -> {
             Thread t = new Thread(r);
             t.setDaemon(true);
             return t;
@@ -125,6 +125,7 @@ public class FileTableController {
         tasksRunning.set(true);
 
         for (ClassificationTask task : selectedFiles) {
+            task.setStatus(Status.NA_FILA);
             executor.execute(task);
         }
 
@@ -135,7 +136,7 @@ public class FileTableController {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            onExecutorServiceFinished();
+            Platform.runLater(() -> onExecutorServiceFinished());
         }).start();
     }
 
@@ -143,17 +144,19 @@ public class FileTableController {
         tasksRunning.set(false);
 
         for (int i = selectedFiles.size() - 1; i >= 0; i--) {
-            if (selectedFiles.get(i).isDone()) {
-                selectedFiles.remove(selectedFiles.get(i));
+            final ClassificationTask task = selectedFiles.get(i);
+            if (task.getStatus() == Status.CONCLUIDO) {
+                System.out.println(task.file);
+                selectedFiles.remove(task);
             }
         }
 
-        Platform.runLater(() -> numTasksCompleted.set(0));
+        numTasksCompleted.set(0);
     }
 
     @FXML
     private void handleBtnCancelar() {
-
+        executor.shutdownNow();
     }
 
     public VBox getRoot() {
@@ -246,7 +249,6 @@ public class FileTableController {
 
         @Override
         protected void scheduled() {
-            System.out.println("OLAR");
             super.scheduled();
             this.setStatus(Status.NA_FILA);
         }
