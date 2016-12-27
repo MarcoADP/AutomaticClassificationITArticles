@@ -28,8 +28,19 @@
     TABLE VIEW
 *******************/
 
+.check-box-table-cell > .check-box:disabled > .box {
+    -fx-background-color: -fx-outer-border, #ccc;
+    -fx-background-insets: 0,1;
+    -fx-opacity: 0.5;
+}
 
+.progress-bar:disabled {
+    -fx-opacity: 1.0;
+}
 
+.table-row-cell:selected:disabled {
+    -fx-opacity: 1.0;
+}
 
 
 .painel {

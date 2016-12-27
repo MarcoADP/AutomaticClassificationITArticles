@@ -4,15 +4,16 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
 
 <VBox fx:id="rootPane" stylesheets="@app.css" xmlns="http://javafx.com/javafx/8.0.111"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="machinelearning.controller.FileTableController">
     <children>
         <Label styleClass="h2" text="Tabela de arquivos"/>
-        <TableView fx:id="tableFiles" prefHeight="200.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
+        <TableView fx:id="tableFiles" prefHeight="200.0" prefWidth="450.0" VBox.vgrow="ALWAYS" editable="true">
             <columns>
+                <TableColumn fx:id="tableColumnCheckBox" prefWidth="40.0"  editable="true"/>
                 <TableColumn fx:id="tableColumnFile" prefWidth="300.0" text="Caminho do Arquivo" />
                 <TableColumn fx:id="tableColumnClassificacao" prefWidth="150" text="Classificação" style="-fx-alignment: center"/>
                 <TableColumn fx:id="tableColumnProgresso" prefWidth="150" text="Progresso"/>
@@ -20,8 +21,11 @@
             </columns>
         </TableView>
         <Label fx:id="labelNumFiles" styleClass="h2" text="Número de arquivos: 0"/>
-        <Label fx:id="labeAnalisando" styleClass="h2" text="Analisando: 0/0 "/>
-        <Label fx:id="labeTotalAnalisados" styleClass="h2" text="Total analisados: 0 "/>
+        <Label fx:id="labelAnalisando" styleClass="h2" text="Analisando: 0/0 "/>
+        <Label fx:id="labelTotalAnalisados" styleClass="h2" text="Total analisados: 0 "/>
+        <Button fx:id="btnAnalisar" text="Analisar" styleClass="btn-primary" onAction="#handleBtnAnalisar"/>
+        <Button fx:id="btnCancelar" text="Cancelar" onAction="#handleBtnCancelar"/>
+
     </children>
     <padding>
         <Insets top="10.0"/>

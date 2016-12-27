@@ -1,35 +1,36 @@
 package machinelearning.controller;
 
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class FileTableController {
 
-    public Label labelNumFiles;
     @FXML
     private VBox rootPane;
-
     @FXML
     private TableView<ClassificationTask> tableFiles;
+
+    @FXML
+    private TableColumn<ClassificationTask, Boolean> tableColumnCheckBox;
     @FXML
     private TableColumn<ClassificationTask, File> tableColumnFile;
     @FXML
@@ -39,41 +40,120 @@ public class FileTableController {
     @FXML
     private TableColumn<ClassificationTask, Status> tableColumnStatus;
 
-    private ObservableList<ClassificationTask> filesToClassify = FXCollections.observableArrayList();
+    @FXML
+    private Label labelNumFiles;
+    @FXML
+    private Label labelAnalisando;
+    @FXML
+    private Label labelTotalAnalisados;
+
+    @FXML
+    private Button btnAnalisar;
+    @FXML
+    private Button btnCancelar;
+
+    private ObservableList<ClassificationTask> files = FXCollections.observableArrayList();
+    private ObservableList<ClassificationTask> selectedFiles = FXCollections.observableArrayList();
+
+    private IntegerProperty numTasksCompleted = new SimpleIntegerProperty(0);
+    private IntegerProperty numTotalAnalisados = new SimpleIntegerProperty(0);
+    private BooleanProperty tasksRunning = new SimpleBooleanProperty(false);
 
 
     @FXML
     private void initialize() {
-        tableFiles.setItems(filesToClassify);
-
+        tableFiles.setItems(files);
         initBindings();
         initTableColumns();
     }
 
     private void initBindings() {
-        IntegerBinding filesSizeBinding = Bindings.size(filesToClassify);
+        IntegerBinding filesSizeBinding = Bindings.size(files);
+        IntegerBinding selectedFilesSizeBinding = Bindings.size(selectedFiles);
+
         labelNumFiles.textProperty().bind(Bindings.format("Número de arquivos: %d", filesSizeBinding));
+        labelAnalisando.textProperty().bind(Bindings.format("Analisando: %d/%d", numTasksCompleted, selectedFilesSizeBinding));
+        labelTotalAnalisados.textProperty().bind(Bindings.format("Total analisados: %d", numTotalAnalisados));
+
+        btnAnalisar.disableProperty().bind(tasksRunning.or(selectedFilesSizeBinding.isEqualTo(0)));
+        btnCancelar.disableProperty().bind(tasksRunning.not());
     }
 
     private void initTableColumns() {
+        tableColumnCheckBox.setCellValueFactory(new PropertyValueFactory<>("selecionado"));
+        tableColumnCheckBox.setCellFactory(CheckBoxTableCell.forTableColumn(tableColumnCheckBox));
+
         tableColumnFile.setCellValueFactory(new PropertyValueFactory<>("file"));
         tableColumnClassificacao.setCellValueFactory(new PropertyValueFactory<>("classification"));
         tableColumnStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         tableColumnProgresso.setCellValueFactory(new PropertyValueFactory<>("progress"));
         tableColumnProgresso.setCellFactory(ProgressBarTableCell.forTableColumn());
+
+        tableFiles.setRowFactory(tv -> {
+            TableRow<ClassificationTask> row = new TableRow<>();
+            row.itemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    row.disableProperty().bind(newValue.statusProperty().isEqualTo(Status.CONCLUIDO).or(tasksRunning));
+                }
+            });
+            return row;
+        });
     }
 
     public int addFiles(List<File> files) {
-        int tamanhoAnterior = this.filesToClassify.size();
+        int tamanhoAnterior = this.files.size();
         files.stream()
-                .filter(file -> !this.filesToClassify.contains(new ClassificationTask(file)))
+                .filter(file -> !this.files.contains(new ClassificationTask(file)))
                 .forEach(this::addClassificationTask);
-        return this.filesToClassify.size() - tamanhoAnterior;
+        return this.files.size() - tamanhoAnterior;
     }
 
     private void addClassificationTask(File file) {
-        filesToClassify.add(new ClassificationTask(file));
-        new Thread(filesToClassify.get(filesToClassify.size() - 1)).start();
+        ClassificationTask task = new ClassificationTask(file, Status.NAO_INICIADO, "-");
+        files.add(task);
+    }
+
+    @FXML
+    private void handleBtnAnalisar() {
+        ExecutorService executor = Executors.newSingleThreadExecutor(r -> {
+            Thread t = new Thread(r);
+            t.setDaemon(true);
+            return t;
+        });
+
+        numTasksCompleted.setValue(0);
+        tasksRunning.set(true);
+
+        for (ClassificationTask task : selectedFiles) {
+            executor.execute(task);
+        }
+
+        new Thread(() -> {
+            executor.shutdown();
+            try {
+                executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            onExecutorServiceFinished();
+        }).start();
+    }
+
+    private void onExecutorServiceFinished() {
+        tasksRunning.set(false);
+
+        for (int i = selectedFiles.size() - 1; i >= 0; i--) {
+            if (selectedFiles.get(i).isDone()) {
+                selectedFiles.remove(selectedFiles.get(i));
+            }
+        }
+
+        Platform.runLater(() -> numTasksCompleted.set(0));
+    }
+
+    @FXML
+    private void handleBtnCancelar() {
+
     }
 
     public VBox getRoot() {
@@ -81,9 +161,10 @@ public class FileTableController {
     }
 
     public enum Status {
+        ANALISANDO("Analisando..."),
         CONCLUIDO("Concluído"),
         NA_FILA("Na fila"),
-        ANALISANDO("Analisando...");
+        NAO_INICIADO("Não iniciado");
 
         private String text;
 
@@ -97,36 +178,77 @@ public class FileTableController {
         }
     }
 
-    public static class ClassificationTask extends Task<Void> {
+    public class ClassificationTask extends Task<Void> {
 
         private File file;
         private StringProperty classification = new SimpleStringProperty();
         private ObjectProperty<Status> status = new SimpleObjectProperty<>();
+        private BooleanProperty selecionado = new SimpleBooleanProperty();
 
         public ClassificationTask(File file, Status status, String classification) {
             this.file = file;
-            this.status.setValue(status);
-            this.classification.setValue(classification);
+            setStatus(status);
+            setClassification(classification);
             updateProgress(0, 0);
+
+            selecionadoProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    if (!selectedFiles.contains(this)) {
+                        selectedFiles.add(this);
+                    }
+                } else {
+                    selectedFiles.remove(this);
+                }
+            });
+            setSelecionado(true);
         }
 
         public ClassificationTask(File file) {
-            this(file, Status.NA_FILA, " - ");
+            this.file = file;
         }
 
         @Override
         protected Void call() throws Exception {
             this.updateProgress(ProgressIndicator.INDETERMINATE_PROGRESS, 1);
-            this.setStatus(Status.NA_FILA);
-            Thread.sleep((int)(Math.random()*1000));
-            this.setStatus(Status.ANALISANDO);
-            for (int i = 0; i < 100; i++) {
-                updateProgress((1.0 * i) / 100, 1);
-                Thread.sleep((int)(Math.random()*200));
+
+            Thread.sleep((int) (Math.random() * 1000));
+
+            for (int i = 0; i < 50; i++) {
+                updateProgress((1.0 * i) / 50, 1);
+                Thread.sleep((int) (Math.random() * 200));
             }
+
+            return null;
+        }
+
+        @Override
+        protected void succeeded() {
+            super.succeeded();
             this.setStatus(Status.CONCLUIDO);
             this.updateProgress(1, 1);
-            return null;
+
+            numTasksCompleted.setValue(numTasksCompleted.get() + 1);
+            numTotalAnalisados.set(numTotalAnalisados.get() + 1);
+        }
+
+        @Override
+        protected void cancelled() {
+            super.cancelled();
+            setStatus(Status.NAO_INICIADO);
+            updateProgress(0, 0);
+        }
+
+        @Override
+        protected void running() {
+            super.running();
+            this.setStatus(Status.ANALISANDO);
+        }
+
+        @Override
+        protected void scheduled() {
+            System.out.println("OLAR");
+            super.scheduled();
+            this.setStatus(Status.NA_FILA);
         }
 
         @Override
@@ -170,6 +292,18 @@ public class FileTableController {
 
         public void setStatus(Status status) {
             this.status.set(status);
+        }
+
+        public boolean isSelecionado() {
+            return selecionado.get();
+        }
+
+        public BooleanProperty selecionadoProperty() {
+            return selecionado;
+        }
+
+        public void setSelecionado(boolean selecionado) {
+            this.selecionado.set(selecionado);
         }
     }
 }
