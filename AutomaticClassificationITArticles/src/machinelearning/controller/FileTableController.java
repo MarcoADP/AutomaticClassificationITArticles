@@ -113,6 +113,11 @@ public class FileTableController {
         files.add(task);
     }
 
+    private void addClassificationTask(ClassificationTask oldTask) {
+        ClassificationTask newTask = new ClassificationTask(oldTask.file, oldTask.getStatus(), "-");
+        files.add(newTask);
+    }
+
     @FXML
     private void handleBtnAnalisar() {
         executor = Executors.newSingleThreadExecutor(r -> {
@@ -146,8 +151,11 @@ public class FileTableController {
         for (int i = selectedFiles.size() - 1; i >= 0; i--) {
             final ClassificationTask task = selectedFiles.get(i);
             if (task.getStatus() == Status.CONCLUIDO) {
-                System.out.println(task.file);
                 selectedFiles.remove(task);
+            } else if (task.getStatus() == Status.CANCELADO) {
+                selectedFiles.remove(task);
+                files.remove(task);
+                addClassificationTask(task);
             }
         }
 
@@ -156,7 +164,11 @@ public class FileTableController {
 
     @FXML
     private void handleBtnCancelar() {
-        executor.shutdownNow();
+        for (ClassificationTask task : selectedFiles) {
+            if (task.getStatus() != Status.CONCLUIDO) {
+                task.cancel();
+            }
+        }
     }
 
     public VBox getRoot() {
@@ -165,9 +177,11 @@ public class FileTableController {
 
     public enum Status {
         ANALISANDO("Analisando..."),
+        CANCELADO("Cancelado"),
         CONCLUIDO("Concluído"),
         NA_FILA("Na fila"),
         NAO_INICIADO("Não iniciado");
+
 
         private String text;
 
@@ -237,7 +251,7 @@ public class FileTableController {
         @Override
         protected void cancelled() {
             super.cancelled();
-            setStatus(Status.NAO_INICIADO);
+            setStatus(Status.CANCELADO);
             updateProgress(0, 0);
         }
 
