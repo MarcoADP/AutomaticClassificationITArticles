@@ -32,10 +32,10 @@
         </TableView>
         <HBox prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
             <children>
-                <Label prefHeight="30.0" styleClass="h3" text="Progresso:" HBox.hgrow="NEVER"/>
+                <Label prefHeight="25.0" styleClass="h3" text="Progresso:" HBox.hgrow="NEVER"/>
                 <ProgressBar fx:id="progressBar" prefHeight="25.0" minHeight="25.0" prefWidth="400.0" progress="0.0"
                              HBox.hgrow="ALWAYS"/>
-                <Label fx:id="labelAnalisando" prefHeight="30.0" styleClass="h3" text="0/0" HBox.hgrow="NEVER"/>
+                <Label fx:id="labelAnalisando" prefHeight="25.0" styleClass="h3" text="0/0" HBox.hgrow="NEVER"/>
             </children>
             <padding>
                 <Insets top="10.0"/>

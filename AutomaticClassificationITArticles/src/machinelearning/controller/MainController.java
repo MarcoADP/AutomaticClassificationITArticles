@@ -5,6 +5,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 
 import java.io.File;
@@ -23,6 +25,19 @@ public class MainController {
     @FXML
     private SobreController sobreController;
 
+    @FXML
+    private RadioMenuItem radioMenuItemT1;
+    @FXML
+    private RadioMenuItem radioMenuItemT2;
+    @FXML
+    private RadioMenuItem radioMenuItemT4;
+    @FXML
+    private RadioMenuItem radioMenuItemT8;
+    @FXML
+    private RadioMenuItem radioMenuItemT16;
+
+    private ToggleGroup toggleGroup;
+
     public static MainController INSTANCE;
 
     @FXML
@@ -30,6 +45,24 @@ public class MainController {
         INSTANCE = this;
 
         sobreController = inicializarController("../view/sobre.fxml");
+
+        configToggleGroup();
+    }
+
+    private void configToggleGroup() {
+        toggleGroup = new ToggleGroup();
+        radioMenuItemT1.setSelected(true);
+        radioMenuItemT1.setToggleGroup(toggleGroup);
+        radioMenuItemT2.setToggleGroup(toggleGroup);
+        radioMenuItemT4.setToggleGroup(toggleGroup);
+        radioMenuItemT8.setToggleGroup(toggleGroup);
+        radioMenuItemT16.setToggleGroup(toggleGroup);
+
+        radioMenuItemT1.setOnAction(event -> fileTableController.setNThreads(1));
+        radioMenuItemT2.setOnAction(event -> fileTableController.setNThreads(2));
+        radioMenuItemT4.setOnAction(event -> fileTableController.setNThreads(4));
+        radioMenuItemT8.setOnAction(event -> fileTableController.setNThreads(8));
+        radioMenuItemT16.setOnAction(event -> fileTableController.setNThreads(16));
     }
 
     public void addFilesToTable(List<File> files) {

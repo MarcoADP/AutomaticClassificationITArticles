@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import machinelearning.neuralnet.NeuralNetwork;
 
 import java.io.File;
 import java.util.List;
@@ -25,9 +26,9 @@ public class FileTableController {
     private VBox rootPane;
     @FXML
     private TableView<ClassificationTask> tableFiles;
-
     @FXML
     private TableColumn<ClassificationTask, Boolean> tableColumnCheckBox;
+
     @FXML
     private TableColumn<ClassificationTask, File> tableColumnFile;
     @FXML
@@ -36,36 +37,40 @@ public class FileTableController {
     //private TableColumn<ClassificationTask, Double> tableColumnProgresso;
     @FXML
     private TableColumn<ClassificationTask, Status> tableColumnStatus;
-
     @FXML
     private Label labelNumFiles;
+
     @FXML
     private Label labelAnalisando;
     @FXML
     private Label labelTotalAnalisados;
-
     @FXML
     private ProgressBar progressBar;
 
     @FXML
     private Button btnAnalisar;
+
     @FXML
     private Button btnCancelar;
-
     private ObservableList<ClassificationTask> files = FXCollections.observableArrayList();
-    private ObservableList<ClassificationTask> selectedFiles = FXCollections.observableArrayList();
 
+    private ObservableList<ClassificationTask> selectedFiles = FXCollections.observableArrayList();
     private IntegerProperty numTasksCompleted = new SimpleIntegerProperty(0);
+
     private IntegerProperty numTotalAnalisados = new SimpleIntegerProperty(0);
     private BooleanProperty tasksRunning = new SimpleBooleanProperty(false);
 
     private ClassificationAllTask cTask;
+    private static final int DEFAULT_THREAD_NUM = 1;
+
+    private int nThreads;
 
     @FXML
     private void initialize() {
         tableFiles.setItems(files);
         configBindings();
         configTable();
+        setNThreads(DEFAULT_THREAD_NUM);
     }
 
     private void configBindings() {
@@ -121,7 +126,7 @@ public class FileTableController {
 
     @FXML
     private void handleBtnAnalisar() {
-        cTask = new ClassificationAllTask(selectedFiles, 1);
+        cTask = new ClassificationAllTask(selectedFiles, nThreads);
 
         ExecutorService executor = Executors.newSingleThreadExecutor(r -> {
             Thread t = new Thread(r);
@@ -164,6 +169,14 @@ public class FileTableController {
 
     public VBox getRoot() {
         return rootPane;
+    }
+
+    public int getNThreads() {
+        return nThreads;
+    }
+
+    public void setNThreads(int nThreads) {
+        this.nThreads = nThreads;
     }
 
     public enum Status {
@@ -217,10 +230,12 @@ public class FileTableController {
 
         @Override
         protected Void call() throws Exception {
+            NeuralNetwork neuralNetwork = new NeuralNetwork(file);
             for (int i = 0; i < 50; i++) {
                 updateProgress((1.0 * i) / 50, 1);
                 Thread.sleep((int) (Math.random() * 200));
             }
+            setClassification(neuralNetwork.classificarTexto());
 
             return null;
         }

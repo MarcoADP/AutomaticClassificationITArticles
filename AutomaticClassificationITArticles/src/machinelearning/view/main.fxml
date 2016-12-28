@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
@@ -16,6 +17,15 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Arquivo">
                     <items>
+                        <Menu mnemonicParsing="false" text="Número de Threads">
+                            <items>
+                                <RadioMenuItem fx:id="radioMenuItemT1" mnemonicParsing="false" text="1"/>
+                                <RadioMenuItem fx:id="radioMenuItemT2" mnemonicParsing="false" text="2"/>
+                                <RadioMenuItem fx:id="radioMenuItemT4" mnemonicParsing="false" text="4"/>
+                                <RadioMenuItem fx:id="radioMenuItemT8" mnemonicParsing="false" text="8"/>
+                                <RadioMenuItem fx:id="radioMenuItemT16" mnemonicParsing="false" text="16"/>
+                            </items>
+                        </Menu>
                         <SeparatorMenuItem/>
                         <MenuItem mnemonicParsing="false" onAction="#handleMenuItemSair" text="Sair"/>
                     </items>
@@ -32,7 +42,8 @@
         <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
             <children>
                 <fx:include fx:id="dragDrop" source="dragdrop.fxml"/>
-                <fx:include fx:id="fileTable" source="filetable.fxml" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS"/>
+                <fx:include fx:id="fileTable" source="filetable.fxml" BorderPane.alignment="CENTER"
+                            VBox.vgrow="ALWAYS"/>
             </children>
             <BorderPane.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
