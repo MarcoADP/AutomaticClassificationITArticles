@@ -1,7 +1,6 @@
 package machinelearning.controller;
 
 
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.*;
@@ -11,7 +10,6 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
@@ -25,17 +23,17 @@ public class FileTableController {
 
     @FXML
     private VBox rootPane;
-
     @FXML
     private TableView<ClassificationTask> tableFiles;
+
     @FXML
     private TableColumn<ClassificationTask, Boolean> tableColumnCheckBox;
     @FXML
     private TableColumn<ClassificationTask, File> tableColumnFile;
     @FXML
     private TableColumn<ClassificationTask, String> tableColumnClassificacao;
-    @FXML
-    private TableColumn<ClassificationTask, Double> tableColumnProgresso;
+    //@FXML
+    //private TableColumn<ClassificationTask, Double> tableColumnProgresso;
     @FXML
     private TableColumn<ClassificationTask, Status> tableColumnStatus;
 
@@ -45,6 +43,9 @@ public class FileTableController {
     private Label labelAnalisando;
     @FXML
     private Label labelTotalAnalisados;
+
+    @FXML
+    private ProgressBar progressBar;
 
     @FXML
     private Button btnAnalisar;
@@ -58,7 +59,7 @@ public class FileTableController {
     private IntegerProperty numTotalAnalisados = new SimpleIntegerProperty(0);
     private BooleanProperty tasksRunning = new SimpleBooleanProperty(false);
 
-    private ExecutorService executor;
+    private ClassificationAllTask cTask;
 
     @FXML
     private void initialize() {
@@ -86,8 +87,8 @@ public class FileTableController {
         tableColumnFile.setCellValueFactory(new PropertyValueFactory<>("file"));
         tableColumnClassificacao.setCellValueFactory(new PropertyValueFactory<>("classification"));
         tableColumnStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-        tableColumnProgresso.setCellValueFactory(new PropertyValueFactory<>("progress"));
-        tableColumnProgresso.setCellFactory(ProgressBarTableCell.forTableColumn());
+        //tableColumnProgresso.setCellValueFactory(new PropertyValueFactory<>("progress"));
+        //tableColumnProgresso.setCellFactory(ProgressBarTableCell.forTableColumn());
 
         tableFiles.setRowFactory(tv -> {
             TableRow<ClassificationTask> row = new TableRow<>();
@@ -120,7 +121,9 @@ public class FileTableController {
 
     @FXML
     private void handleBtnAnalisar() {
-        executor = Executors.newSingleThreadExecutor(r -> {
+        cTask = new ClassificationAllTask(selectedFiles, 1);
+
+        ExecutorService executor = Executors.newSingleThreadExecutor(r -> {
             Thread t = new Thread(r);
             t.setDaemon(true);
             return t;
@@ -129,20 +132,17 @@ public class FileTableController {
         numTasksCompleted.setValue(0);
         tasksRunning.set(true);
 
-        for (ClassificationTask task : selectedFiles) {
-            task.setStatus(Status.NA_FILA);
-            executor.execute(task);
-        }
+        executor.execute(cTask);
+    }
 
-        new Thread(() -> {
-            executor.shutdown();
-            try {
-                executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    @FXML
+    private void handleBtnCancelar() {
+        for (ClassificationTask task : selectedFiles) {
+            if (task.getStatus() != Status.CONCLUIDO) {
+                task.cancel();
             }
-            Platform.runLater(() -> onExecutorServiceFinished());
-        }).start();
+        }
+        cTask.cancel();
     }
 
     private void onExecutorServiceFinished() {
@@ -160,15 +160,6 @@ public class FileTableController {
         }
 
         numTasksCompleted.set(0);
-    }
-
-    @FXML
-    private void handleBtnCancelar() {
-        for (ClassificationTask task : selectedFiles) {
-            if (task.getStatus() != Status.CONCLUIDO) {
-                task.cancel();
-            }
-        }
     }
 
     public VBox getRoot() {
@@ -226,10 +217,6 @@ public class FileTableController {
 
         @Override
         protected Void call() throws Exception {
-            this.updateProgress(ProgressIndicator.INDETERMINATE_PROGRESS, 1);
-
-            Thread.sleep((int) (Math.random() * 1000));
-
             for (int i = 0; i < 50; i++) {
                 updateProgress((1.0 * i) / 50, 1);
                 Thread.sleep((int) (Math.random() * 200));
@@ -320,6 +307,62 @@ public class FileTableController {
 
         public void setSelecionado(boolean selecionado) {
             this.selecionado.set(selecionado);
+        }
+    }
+
+    public class ClassificationAllTask extends Task<Void> {
+
+        private List<ClassificationTask> tasks;
+
+        private DoubleProperty pProperty = new SimpleDoubleProperty(0.0);
+
+        private ExecutorService executor;
+
+        public ClassificationAllTask(List<ClassificationTask> tasks, int nThreads) {
+            this.tasks = tasks;
+            progressBar.progressProperty().bind(pProperty.divide(tasks.size()));
+
+            executor = Executors.newFixedThreadPool(nThreads, r -> {
+                Thread t = new Thread(r);
+                t.setDaemon(true);
+                return t;
+            });
+        }
+
+        @Override
+        protected Void call() throws Exception {
+            this.updateProgress(0.0, tasks.size());
+            pProperty.set(0.0);
+
+            for (ClassificationTask task : tasks) {
+                task.setStatus(Status.NA_FILA);
+                task.progressProperty().addListener((observable, oldValue, newValue) -> {
+                    double progress = newValue.doubleValue() - oldValue.doubleValue();
+                    if (Double.isNaN(progress)) progress = 0.0;
+                    pProperty.setValue(pProperty.getValue() + progress);
+                });
+
+                executor.execute(task);
+            }
+
+            executor.shutdown();
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+
+            return null;
+        }
+
+        @Override
+        protected void cancelled() {
+            super.cancelled();
+            updateProgress(0, 0);
+            onExecutorServiceFinished();
+        }
+
+        @Override
+        protected void succeeded() {
+            super.succeeded();
+            updateProgress(1, 1);
+            onExecutorServiceFinished();
         }
     }
 }

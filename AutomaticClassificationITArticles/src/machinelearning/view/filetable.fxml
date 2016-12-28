@@ -1,34 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
 
-<VBox fx:id="rootPane" stylesheets="@app.css" xmlns="http://javafx.com/javafx/8.0.111"
+<VBox fx:id="rootPane" styleClass="painel" stylesheets="@app.css" xmlns="http://javafx.com/javafx/8.0.111"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="machinelearning.controller.FileTableController">
     <children>
-        <Label styleClass="h2" text="Tabela de arquivos"/>
-        <TableView fx:id="tableFiles" prefHeight="200.0" prefWidth="450.0" VBox.vgrow="ALWAYS" editable="true">
+        <Label styleClass="h2" text="Arquivos para classificação"/>
+        <Separator prefWidth="200.0">
+            <VBox.margin>
+                <Insets bottom="10.0"/>
+            </VBox.margin>
+        </Separator>
+        <TableView fx:id="tableFiles" editable="true" prefHeight="200.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="tableColumnCheckBox" prefWidth="40.0" editable="true"/>
-                <TableColumn fx:id="tableColumnFile" prefWidth="300.0" text="Caminho do Arquivo"/>
-                <TableColumn fx:id="tableColumnClassificacao" prefWidth="150" text="Classificação"
-                             styleClass="label-result" style="-fx-alignment: center"/>
-                <TableColumn fx:id="tableColumnProgresso" prefWidth="150" text="Progresso"/>
-                <TableColumn fx:id="tableColumnStatus" prefWidth="100" text="Status" style="-fx-alignment: center"/>
+                <TableColumn fx:id="tableColumnCheckBox" editable="true" prefWidth="40.0"/>
+                <TableColumn fx:id="tableColumnFile" prefWidth="350.0" text="Caminho do Arquivo"/>
+                <TableColumn fx:id="tableColumnClassificacao" prefWidth="200" style="-fx-alignment: center"
+                             styleClass="label-result" text="Classificação"/>
+                <!--<TableColumn fx:id="tableColumnProgresso" prefWidth="150" text="Progresso"/>-->
+                <TableColumn fx:id="tableColumnStatus" prefWidth="100" style="-fx-alignment: center" text="Status"/>
             </columns>
         </TableView>
-        <Label fx:id="labelNumFiles" styleClass="h2" text="Número de arquivos: 0"/>
-        <Label fx:id="labelAnalisando" styleClass="h2" text="Analisando: 0/0 "/>
-        <Label fx:id="labelTotalAnalisados" styleClass="h2" text="Total analisados: 0 "/>
-        <Button fx:id="btnAnalisar" text="Analisar" styleClass="btn-primary" onAction="#handleBtnAnalisar"/>
-        <Button fx:id="btnCancelar" text="Cancelar" onAction="#handleBtnCancelar"/>
-
+        <HBox prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
+            <children>
+                <Label prefHeight="30.0" styleClass="h3" text="Progresso:" HBox.hgrow="NEVER"/>
+                <ProgressBar fx:id="progressBar" prefHeight="25.0" minHeight="25.0" prefWidth="400.0" progress="0.0"
+                             HBox.hgrow="ALWAYS"/>
+                <Label fx:id="labelAnalisando" prefHeight="30.0" styleClass="h3" text="0/0" HBox.hgrow="NEVER"/>
+            </children>
+            <padding>
+                <Insets top="10.0"/>
+            </padding>
+            <VBox.margin>
+                <Insets bottom="10.0"/>
+            </VBox.margin>
+        </HBox>
+        <Label styleClass="h2" text="Info"/>
+        <Separator prefWidth="200.0">
+            <VBox.margin>
+                <Insets bottom="10.0"/>
+            </VBox.margin>
+        </Separator>
+        <VBox spacing="5.0">
+            <children>
+                <Label fx:id="labelNumFiles" styleClass="h3" text="Número de arquivos: 0"/>
+                <Label fx:id="labelTotalAnalisados" styleClass="h3" text="Total analisados: 0 "/>
+            </children>
+        </VBox>
+        <ButtonBar>
+            <buttons>
+                <Button fx:id="btnCancelar" onAction="#handleBtnCancelar" minHeight="40.0" prefHeight="40.0"
+                        styleClass="btn-cancel"
+                        text="Cancelar"/>
+                <Button fx:id="btnAnalisar" onAction="#handleBtnAnalisar" minHeight="40.0" prefHeight="40.0"
+                        prefWidth="100.0"
+                        styleClass="btn-primary" text="Analisar"/>
+            </buttons>
+            <VBox.margin>
+                <Insets bottom="5.0" top="10.0"/>
+            </VBox.margin>
+        </ButtonBar>
     </children>
+    <opaqueInsets>
+        <Insets/>
+    </opaqueInsets>
     <padding>
-        <Insets top="10.0"/>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
     </padding>
 </VBox>

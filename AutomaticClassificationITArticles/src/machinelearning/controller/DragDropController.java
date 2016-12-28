@@ -38,7 +38,7 @@ public class DragDropController {
         cstBorder.setNode(rootPane);
         cstBorder.setStyleName("drag-pane-border-color");
         cstBorder.setStart(Color.rgb(220, 220, 220));
-        cstBorder.setEnd(Color.rgb(77, 64, 185));
+        cstBorder.setEnd(Color.rgb(82, 100, 174));
 
         cstLabel = new ColorStyleTransition(0.3);
         cstLabel.setNode(labelDrag);
