@@ -1,0 +1,3 @@
+rate
+services
+TOTAL => 2
