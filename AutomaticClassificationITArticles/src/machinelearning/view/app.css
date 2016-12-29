@@ -34,7 +34,7 @@
 }
 
 .table-view .column-header .arrow, .table-view .column-header .sort-order-dot {
-    -fx-background-color: #949494;
+    -fx-background-color: white;
 }
 
 .table-view .column-header:last-visible {
@@ -113,6 +113,10 @@
     -fx-text-fill: green;
 }
 
+.table-row-cell .black {
+    -fx-text-fill: black;
+}
+
 /******************
       GERAL
 *******************/
@@ -172,7 +176,7 @@
     -fx-effect: dropshadow(gaussian, #3d7fdf, 3, 0.1, 0, 0);
 }
 
-.btn-cancel {
+.btn-default {
     -fx-background-color: transparent, linear-gradient(#daddda, #bec1c1);
     -fx-background-radius: 4px;
     -fx-text-fill: #757575;
@@ -182,15 +186,15 @@
     -fx-border-radius: 4px;
 }
 
-.btn-cancel:hover {
+.btn-default:hover {
     -fx-background-color: transparent, linear-gradient(#e8e7e6, #cbcbcb);
 }
 
-.btn-cancel:armed {
+.btn-default:armed {
     -fx-background-color: transparent, linear-gradient(#d7d7d7, #c2c6c6);
 }
 
-.btn-cancel:focused {
+.btn-default:focused {
     -fx-background-radius: 0;
     -fx-effect: dropshadow(gaussian, #3d7fdf, 3, 0.1, 0, 0);
 }

@@ -8,7 +8,10 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox fx:id="rootPane" styleClass="painel" stylesheets="@app.css" xmlns="http://javafx.com/javafx/8.0.111"
@@ -33,8 +36,8 @@
         <HBox prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
             <children>
                 <Label prefHeight="25.0" styleClass="h3" text="Progresso:" HBox.hgrow="NEVER"/>
-                <ProgressBar fx:id="progressBar" prefHeight="25.0" minHeight="25.0" prefWidth="400.0" progress="0.0"
-                             HBox.hgrow="ALWAYS"/>
+                <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" minHeight="25.0" prefHeight="25.0"
+                             prefWidth="400.0" progress="0.0" HBox.hgrow="ALWAYS"/>
                 <Label fx:id="labelAnalisando" prefHeight="25.0" styleClass="h3" text="0/0" HBox.hgrow="NEVER"/>
             </children>
             <padding>
@@ -50,20 +53,32 @@
                 <Insets bottom="10.0"/>
             </VBox.margin>
         </Separator>
-        <VBox spacing="5.0">
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
             <children>
                 <Label fx:id="labelNumFiles" styleClass="h3" text="Número de arquivos: 0"/>
-                <Label fx:id="labelTotalAnalisados" styleClass="h3" text="Total analisados: 0 "/>
+                <Label fx:id="labelTotalAnalisados" styleClass="h3" text="Total analisados: 0 " GridPane.rowIndex="1"/>
+                <Label fx:id="labelNumIA" styleClass="h3" text="Classificados como Inteligência Artificial: 0"
+                       GridPane.columnIndex="1"/>
+                <Label fx:id="labelNumNotIA" styleClass="h3" text="Classificados como Outros: 0 "
+                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             </children>
-        </VBox>
+        </GridPane>
         <ButtonBar>
             <buttons>
-                <Button fx:id="btnCancelar" onAction="#handleBtnCancelar" minHeight="40.0" prefHeight="40.0"
-                        styleClass="btn-cancel"
-                        text="Cancelar"/>
-                <Button fx:id="btnAnalisar" onAction="#handleBtnAnalisar" minHeight="40.0" prefHeight="40.0"
-                        prefWidth="100.0"
-                        styleClass="btn-primary" text="Analisar"/>
+                <Button fx:id="btnRemover" onAction="#handleBtnRemover" styleClass="btn-default"
+                        text="Remover Selecionados" translateY="7.0" ButtonBar.buttonData="LEFT"/>
+                <Button fx:id="btnCancelar" maxWidth="100.0" minHeight="40.0" onAction="#handleBtnCancelar"
+                        prefHeight="40.0" styleClass="btn-default" text="Cancelar"/>
+                <Button fx:id="btnAnalisar" maxWidth="100.0" minHeight="40.0" onAction="#handleBtnAnalisar"
+                        prefHeight="40.0" styleClass="btn-primary" text="Analisar"/>
             </buttons>
             <VBox.margin>
                 <Insets bottom="5.0" top="10.0"/>

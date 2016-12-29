@@ -3,13 +3,15 @@ package machinelearning.readers;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class PDFReader {
 
-    public static PDDocument openPDF(String dir) throws IOException {
-        return PDDocument.load(new File(dir));
+    public static PDDocument openPDF(File file) throws IOException {
+        return PDDocument.load(file);
     }
 
     public static String getText(PDDocument pd) throws IOException {
@@ -18,20 +20,33 @@ public class PDFReader {
 
     public static String[] splitText(String text) {
         String subText[];
-        subText = text.split(" ");
+        subText = text.split("\\s+");
         return subText;
     }
 
-    public static int compareTexts(ArrayList<String> text1, String[] text2) {
+    public static List<String> getPDFWords(File file) throws IOException {
+        PDDocument pdDocument = openPDF(file);
+        String text = getText(pdDocument);
+        pdDocument.close();
+        return Arrays.asList(splitText(text));
+    }
+
+    public static int compareTexts(List<String> textKeyWords, List<String> pdfWords, String filePath) throws IOException {
+        //PrintWriter gravarArq = new PrintWriter(new FileWriter(filePath));
+
         int count = 0;
-        for (String s : text1) {
-            for (String a : text2) {
-                if (s.contains(a) && !a.equals("") && a.length() > 3) {
+        for (String tkeyWord : textKeyWords) {
+            for (String pdfWord : pdfWords) {
+                if (tkeyWord.contains(pdfWord) && !pdfWord.equals("") && pdfWord.length() > 3) {
                     count++;
-                    //System.out.println("S => " + s + " || A => " + a);
+                    //gravarArq.printf("%s\n", pdfWord);
                 }
             }
         }
+
+        //gravarArq.printf("TOTAL => %d\n", count);
+        //gravarArq.close();
+
         return count;
     }
 

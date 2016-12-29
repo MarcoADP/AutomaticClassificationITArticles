@@ -49,9 +49,11 @@ public class FileTableController {
 
     @FXML
     private Button btnAnalisar;
-
     @FXML
     private Button btnCancelar;
+    @FXML
+    private Button btnRemover;
+
     private ObservableList<ClassificationTask> files = FXCollections.observableArrayList();
 
     private ObservableList<ClassificationTask> selectedFiles = FXCollections.observableArrayList();
@@ -83,6 +85,7 @@ public class FileTableController {
 
         btnAnalisar.disableProperty().bind(tasksRunning.or(selectedFilesSizeBinding.isEqualTo(0)));
         btnCancelar.disableProperty().bind(tasksRunning.not());
+        btnRemover.disableProperty().bind(tasksRunning.or(selectedFilesSizeBinding.isEqualTo(0)));
     }
 
     private void configTable() {
@@ -90,10 +93,27 @@ public class FileTableController {
         tableColumnCheckBox.setCellFactory(CheckBoxTableCell.forTableColumn(tableColumnCheckBox));
 
         tableColumnFile.setCellValueFactory(new PropertyValueFactory<>("file"));
-        tableColumnClassificacao.setCellValueFactory(new PropertyValueFactory<>("classification"));
         tableColumnStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         //tableColumnProgresso.setCellValueFactory(new PropertyValueFactory<>("progress"));
         //tableColumnProgresso.setCellFactory(ProgressBarTableCell.forTableColumn());
+        tableColumnClassificacao.setCellValueFactory(new PropertyValueFactory<>("classification"));
+        tableColumnClassificacao.setCellFactory(param -> {
+            return new TableCell<ClassificationTask, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    getStyleClass().remove("black");
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(item);
+                        if (item.contains("NÃO")) {
+                            getStyleClass().add("black");
+                        }
+                    }
+                }
+            };
+        });
 
         tableFiles.setRowFactory(tv -> {
             TableRow<ClassificationTask> row = new TableRow<>();
@@ -148,6 +168,17 @@ public class FileTableController {
             }
         }
         cTask.cancel();
+    }
+
+    @FXML
+    private void handleBtnRemover() {
+        for (int i = files.size() - 1; i >= 0; i--) {
+            final ClassificationTask task = files.get(i);
+            if (task.getStatus() != Status.CONCLUIDO && task.isSelecionado()) {
+                files.remove(task);
+                selectedFiles.remove(task);
+            }
+        }
     }
 
     private void onExecutorServiceFinished() {
@@ -230,12 +261,12 @@ public class FileTableController {
 
         @Override
         protected Void call() throws Exception {
-            NeuralNetwork neuralNetwork = new NeuralNetwork(file);
-            for (int i = 0; i < 50; i++) {
-                updateProgress((1.0 * i) / 50, 1);
-                Thread.sleep((int) (Math.random() * 200));
-            }
-            setClassification(neuralNetwork.classificarTexto());
+            updateProgress(0, 1);
+
+            NeuralNetwork neuralNetwork = new NeuralNetwork(new File("ArtificialIntelligenceAreas.txt"));
+            String classification = neuralNetwork.classificarTexto(file);
+
+            setClassification(classification);
 
             return null;
         }
