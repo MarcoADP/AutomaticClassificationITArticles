@@ -6,13 +6,13 @@ import java.util.Random;
 
 public class Neuron {
     
-    int numInputs;
-    Double learningRate;
-    Double zWeigth;
-    Double result;
-    Double error;
-    List<Double> lastInp;
-    List<Double> weights;
+    private int numInputs;
+    private Double learningRate;
+    private Double zWeigth;
+    private Double result;
+    private Double error;
+    private List<Double> lastInp;
+    private List<Double> weights;
     
     public Neuron(){
         this.learningRate = 0.5;
