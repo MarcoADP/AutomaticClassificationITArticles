@@ -23,7 +23,7 @@
                 <Insets bottom="10.0"/>
             </VBox.margin>
         </Separator>
-        <TableView fx:id="tableFiles" editable="true" prefHeight="200.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
+        <TableView fx:id="tableFiles" editable="true" prefHeight="100.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="tableColumnCheckBox" editable="true" prefWidth="40.0"/>
                 <TableColumn fx:id="tableColumnFile" prefWidth="350.0" text="Caminho do Arquivo"/>

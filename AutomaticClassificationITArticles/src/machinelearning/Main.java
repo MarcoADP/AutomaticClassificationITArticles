@@ -12,7 +12,7 @@ public class Main extends Application {
 
     public static final String TITULO = "Article Classification";
     public static final int LARGURA = 800;
-    public static final int ALTURA = 800;
+    public static final int ALTURA = 600;
 
     private Stage stage;
 
