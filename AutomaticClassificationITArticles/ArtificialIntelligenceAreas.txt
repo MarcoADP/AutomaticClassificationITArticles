@@ -1,149 +1,199 @@
 2
 General
 Cognitive Simulation
-Philosophical foundations
-15
+Philosophical foundation
+21
 Applications and Expert Knowledge Intensive Systems
+application
+expert knowledge 
+intensive system
+expert knowledge intensive system
 Cartography
 Computer vision
 Decision support
 Education
 Environment
-Games and infotainment
+Game
+infotainment
 Industrial automation
 Law
 Mathematics
-Medicine and science
+Medicine
+science
 Military
-Natural language interfaces
+Natural language interface
 Office automation
 Space
 Transportation
-5
+6
 Automatic Programming
+automatic programming
 Automatic analysis of algorithms
 Program modification
 Program synthesis
 Program transformation
 Program verification
-12
+18
 Deduction and Theorem Proving and Knowledge Processing
-Answer/reason extraction
+theorem proving
+knowledge processing
+Answer extraction
+reason extraction
 Constraint-based processing
 Deduction
-Inference engines
+Inference engine
 Logic processing
 Logic programming
 Mathematical induction
 Metatheory
-Nonmonotonic reasoning and belief revision
+Nonmonotonic reasoning 
+Nonmonotonic belief revision
 Resolution
 Rule-based processing
-Uncertainty, “fuzzy,” and probabilistic reasoning
-13
-Knowledge Representation Formalisms and Methods
-Agent communication languages
-Distributed representations
+Uncertainty
+fuzzy
+probabilistic reasoning
+15
+Knowledge Representation Formalism
+Knowledge Representation Methods
+Agent communication language
+Distributed representation
 Frames and scripts
 Knowledge base management
 Knowledge base verification
 Modal logic
 Predicate logic
-Relation systems
-Representation languages
-Representations (procedural and rulebased)
-Semantic networks
-Storage mechanisms
+Relation system
+Representation language
+procedural Representation
+rulebased representation
+Semantic network
+Storage mechanism
 Temporal logic
 1
 Programming Languages and Software
 Expert and knowledge-intensive system tools and techniques
-9
+11
 Learning
-Analogies
+learning
+Analogy
 Concept learning
-Connectionism and neural nets
+Connectionism
+neural network
 Heuristics design
 Induction
 Knowledge acquisition
 Machine learning
 Language acquisition
 Parameter learning
-9
+12
 Natural Language Processing
+natural language processing
 Discourse
 Language generation
-Language models
-Language parsing and understanding
+Language model
+Language parsing
+language understanding
 Language summarization
 Machine translation
-Speech recognition and synthesis
+Speech recognition
+speech synthesis
 Text analysis
 Web text analysis
-8
+15
 Problem Solving, Control Methods, and Search
+problem solving
+control methods
+search
 Backtracking
 Constraint satisfaction
 Control theory
 Dynamic programming
-Graph and tree search strategies
-Heuristic methods
-Plan execution, formation, and generation
+Graph search
+tree search
+Heuristic method
+Plan execution
+plan formation
+plan generation
 Scheduling
-12
+17
 Robotics
-Autonomous vehicles
+robotics
+Autonomous vehicle
 Biorobotics
-Commercial robots and applications
-Kinematics and dynamics
+Commercial robot
+commercial application
+Kinematics
+dynamics
 Manipulators
 Nanorobots
 Neuromorphic computing
 Operator interfaces
-Propelling mechanisms
+Propelling mechanism
 Sensors
-Workcell organization and planning
+Workcell organization
+workcell planning
 Vision
-10
+21
 Vision and Scene Understanding
-3D/stereo scene analysis
-Architecture and control structures
-Intensity, color, photometry, and thresholding
-Modeling and recovery of physical attributes
+vision understanding
+scene understanding
+3D scene analysis
+stereo scene analysis
+Architecture structure
+control structure
+Intensity
+color
+photometry
+thresholding
+Modeling physical attribute
+recovery of physical attribute
 Motion
 Perceptual reasoning
-Representations, data structures, and transforms
+Representation
+data structure
+transform
 Shape
 Texture
 Video analysis
-4
+7
 Distributed Artificial Intelligence
-Coherence and coordination
-Intelligent agents
-Languages and structures
-Multiagent systems
-4
+distributed artificial intelligence
+Coherence
+coordination
+Intelligent agent
+Language
+structure
+Multiagent system
+7
 Intelligent Web Services and Semantic Web
-Intelligent Web service languages
-Internet reasoning services
+Intelligent Web service
+semantic web
+Intelligent Web service language
+Internet reasoning
+Internet reasoning service
 Ontology design
-Ontology languages
-10
+Ontology language
+13
+Knowledge Management
 Knowledge Management
 Knowledge acquisition
-Knowledge engineering methodologies
-Knowledge life cycles
+Knowledge engineering
+Knowledge engineering methodology
+Knowledge life cycle
 Knowledge maintenance
 Knowledge modeling
-Knowledge personalization and customization
+Knowledge personalization
+knowledge customization
 Knowledge publishing
 Knowledge retrieval
 Knowledge reuse
 Knowledge valuation
-4
+5
 Miscellaneous
 Adaptive hypermedia
 Computational neuroscience
-Evolutionary computing and genetic algorithms
+Evolutionary computing
+genetic algorithms
 Wearable AI
 0
