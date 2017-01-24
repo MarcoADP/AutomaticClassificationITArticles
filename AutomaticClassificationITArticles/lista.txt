@@ -1,7 +1,8 @@
-Artificial Intelligence
+2
 General
-Cognitive simulation
+Cognitive Simulation
 Philosophical foundations
+15
 Applications and Expert Knowledge Intensive Systems
 Cartography
 Computer vision
@@ -18,12 +19,14 @@ Natural language interfaces
 Office automation
 Space
 Transportation
+5
 Automatic Programming
 Automatic analysis of algorithms
 Program modification
 Program synthesis
 Program transformation
 Program verification
+12
 Deduction and Theorem Proving and Knowledge Processing
 Answer/reason extraction
 Constraint-based processing
@@ -37,6 +40,7 @@ Nonmonotonic reasoning and belief revision
 Resolution
 Rule-based processing
 Uncertainty, “fuzzy,” and probabilistic reasoning
+13
 Knowledge Representation Formalisms and Methods
 Agent communication languages
 Distributed representations
@@ -51,8 +55,10 @@ Representations (procedural and rulebased)
 Semantic networks
 Storage mechanisms
 Temporal logic
+1
 Programming Languages and Software
 Expert and knowledge-intensive system tools and techniques
+9
 Learning
 Analogies
 Concept learning
@@ -63,6 +69,7 @@ Knowledge acquisition
 Machine learning
 Language acquisition
 Parameter learning
+9
 Natural Language Processing
 Discourse
 Language generation
@@ -73,6 +80,7 @@ Machine translation
 Speech recognition and synthesis
 Text analysis
 Web text analysis
+8
 Problem Solving, Control Methods, and Search
 Backtracking
 Constraint satisfaction
@@ -82,6 +90,7 @@ Graph and tree search strategies
 Heuristic methods
 Plan execution, formation, and generation
 Scheduling
+12
 Robotics
 Autonomous vehicles
 Biorobotics
@@ -95,6 +104,7 @@ Propelling mechanisms
 Sensors
 Workcell organization and planning
 Vision
+10
 Vision and Scene Understanding
 3D/stereo scene analysis
 Architecture and control structures
@@ -106,16 +116,19 @@ Representations, data structures, and transforms
 Shape
 Texture
 Video analysis
+4
 Distributed Artificial Intelligence
 Coherence and coordination
 Intelligent agents
 Languages and structures
 Multiagent systems
+4
 Intelligent Web Services and Semantic Web
 Intelligent Web service languages
 Internet reasoning services
 Ontology design
 Ontology languages
+10
 Knowledge Management
 Knowledge acquisition
 Knowledge engineering methodologies
@@ -127,6 +140,7 @@ Knowledge publishing
 Knowledge retrieval
 Knowledge reuse
 Knowledge valuation
+4
 Miscellaneous
 Adaptive hypermedia
 Computational neuroscience
