@@ -201,3 +201,27 @@
 
 
 
+.btn-action {
+    -fx-background-color: transparent, linear-gradient(#daddda, #bec1c1);
+    -fx-background-radius: 4px;
+    -fx-text-fill: #757575;
+    -fx-font-weight: bold;
+    -fx-border-color: #c0c2c9;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;
+    -fx-font-size: 10px;
+}
+
+.btn-action:hover {
+    -fx-background-color: transparent, linear-gradient(#e8e7e6, #cbcbcb);
+}
+
+.btn-action:armed {
+    -fx-background-color: transparent, linear-gradient(#d7d7d7, #c2c6c6);
+}
+
+.btn-action:focused {
+    -fx-background-radius: 0;
+    -fx-effect: dropshadow(gaussian, #3d7fdf, 3, 0.1, 0, 0);
+}
+
