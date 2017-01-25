@@ -8,10 +8,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import machinelearning.neuralnet.NeuralNetwork;
 
 import java.io.File;
@@ -33,6 +34,8 @@ public class FileTableController {
     private TableColumn<ClassificationTask, File> tableColumnFile;
     @FXML
     private TableColumn<ClassificationTask, String> tableColumnClassificacao;
+    @FXML
+    private TableColumn<ClassificationTask, Boolean> tableColumnAction;
     //@FXML
     //private TableColumn<ClassificationTask, Double> tableColumnProgresso;
     @FXML
@@ -94,8 +97,13 @@ public class FileTableController {
 
         tableColumnFile.setCellValueFactory(new PropertyValueFactory<>("file"));
         tableColumnStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        tableColumnAction.setCellValueFactory(features -> new SimpleBooleanProperty(features.getValue() != null));
+        tableColumnAction.setCellFactory(tableColumn -> new ButtonCell(tableFiles));
+
         //tableColumnProgresso.setCellValueFactory(new PropertyValueFactory<>("progress"));
         //tableColumnProgresso.setCellFactory(ProgressBarTableCell.forTableColumn());
+
         tableColumnClassificacao.setCellValueFactory(new PropertyValueFactory<>("classification"));
         tableColumnClassificacao.setCellFactory(param -> {
             return new TableCell<ClassificationTask, String>() {
@@ -107,7 +115,7 @@ public class FileTableController {
                         setText(null);
                     } else {
                         setText(item);
-                        if (item.contains("NÃO")) {
+                        if (item.toUpperCase().contains("NÃO")) {
                             getStyleClass().add("black");
                         }
                     }
@@ -119,7 +127,8 @@ public class FileTableController {
             TableRow<ClassificationTask> row = new TableRow<>();
             row.itemProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue != null) {
-                    row.disableProperty().bind(newValue.statusProperty().isEqualTo(Status.CONCLUIDO).or(tasksRunning));
+                    //row.disableProperty().bind(newValue.statusProperty().isEqualTo(Status.CONCLUIDO).or(tasksRunning));
+                    row.disableProperty().bind(tasksRunning);
                 }
             });
             return row;
@@ -245,7 +254,7 @@ public class FileTableController {
 
             selecionadoProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
-                    if (!selectedFiles.contains(this)) {
+                    if (!selectedFiles.contains(this) && this.status.get() != Status.CONCLUIDO) {
                         selectedFiles.add(this);
                     }
                 } else {
@@ -410,5 +419,36 @@ public class FileTableController {
             updateProgress(1, 1);
             onExecutorServiceFinished();
         }
+    }
+    
+    private class ButtonCell extends TableCell<ClassificationTask, Boolean> {
+        final Button btnShow = new Button("Visualizar");
+        final StackPane paddedButton = new StackPane();
+
+        public ButtonCell(final TableView table) {
+            paddedButton.setPadding(new Insets(1));
+            paddedButton.getChildren().add(btnShow);
+            btnShow.setOnAction(event -> {
+                showClassificationInfo(getTableView().getItems().get(getIndex()));
+            });
+            btnShow.getStyleClass().add("btn-action");
+        }
+
+        @Override protected void updateItem(Boolean item, boolean empty) {
+            super.updateItem(item, empty);
+            btnShow.disableProperty().unbind();
+
+            if (!empty) {
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                setGraphic(paddedButton);
+                btnShow.disableProperty().bind(getTableView().getItems().get(getIndex()).statusProperty().isEqualTo(Status.CONCLUIDO).not());
+            } else {
+                setGraphic(null);
+            }
+        }
+    }
+
+    private void showClassificationInfo(ClassificationTask classificationTask) {
+        System.out.println(classificationTask.file);
     }
 }
