@@ -1,21 +1,72 @@
-12
+15
 [Applications and Expert Knowledge Intensive Systems]
 application
 expert knowledge
 intensive system
 expert knowledge intensive system
+cartography
+computer vision
+decision support
+education
+environment
+game
+infotainment
+industrial automation
+law
+mathematics
+medicine
+science
+military
+natural language interface
+office automation
+space
+transportation
 
 [Automatic Programming]
 automatic programming
+automatic analysis
+automatic analysis of algorithm
+program modification
+program transformation
+program verification
 
 [Deduction and Theorem Proving and Knowledge Processing]
 deduction
 theorem proving
 knowledge processing
+answer extraction
+reason extraction
+constraint-based processing
+inference engine
+logic processing
+logic programming
+mathematical induction
+metatheory
+nommonotonic reasoning
+nonmonotonic belief revision
+resolution
+rule-based processing
+uncertainty
+fuzzy
+probabilistic reasoning
 
 [Knowledge Representation Formalisms and Methods]
 knowledge representation formalism
 knowledge representation method
+distributed representation
+frame
+script
+knowledge base management
+knowledge base verification
+modal logic
+predicate logic
+relation system
+representation language
+procedural representation
+rulebased representation
+semantic network
+storage mechanism
+temporal logic
 
 [Learning]
 analogy
@@ -23,44 +74,118 @@ neural network
 induction
 machine learning
 
+[Programming Languages and Software]
+programming language
+software
+expert system tool
+expert technique
+knowledge-intensive system tool
+knowledge-intensive technique
+
 [Natural Language Processing]
 natural language processing
 discourse
 language generation
+language model
+language parsing
+language understanding
+language summarization
 machine translation
+speech recognition
+speech synthesis
+text analysis
+web text analysis
 
 [Problem Solving, Control Methods, and Search]
 problem solving
 control method
 backtracking
 constraint satisfaction
+control theory
+dynamic programming
 graph search
 tree search
+heuristic method
+plan execution
+plan formation
+plan generation
 scheduling
 
 [Robotics]
 robotics
 autonomous vehicle
-nanorobot
-biorobotic
+biorobotics
+commercial robot
+commercial application
+kinematics
+dynamics
+manipulators
+nanorobots
+neuromorphic computing
+operator interface
+propelling mechanism
 sensors
+workcell organization
+workcell planning
+vision
 
 [Vision and Scene Understanding]
 vision understanding
 scene understanding
+3D scene analysis
+stereo scene analysis
+architecture structure
+control structure
+light intensity
+color
+photometry
+thresholding
+modeling physical attribute
+recovery of physical attribute
+motion
 perceptual reasoning
+representation
+data structure
+transform
+shape
+texture
 video analysis
 
 [Distributed Artificial Intelligence]
 distributed artificial intelligence
-multiagent
-coherence and coordination
+coherence
+coordination
+intelligent agent
+language
+structure
+multiagent system
 
 [Intelligent Web Services and Semantic Web]
 intelligent web service
 semantic web
+intelligent web service language
 internet reasoning service
+ontology design
+ontology language
 
 [Knowledge Management]
 knowledge management
+knowledge acquisition
+knowledge engineering
+knowledge engineering methodology
+knowledge life cycle
+knowledge maintenance
 knowledge modeling
+knowledge personalization
+knowledge customization
+knowledge publishing
+knowledge retrieval
+knowledge reuse
+knowledge valuation
+
+[Miscellaneous]
+adaptive hypermedia
+computational neuroscience
+evolutionary computing
+genetic algorithm
+weareable ai
