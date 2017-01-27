@@ -11,8 +11,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.data.DataSet;
-import org.neuroph.core.learning.LearningRule;
-import org.neuroph.core.learning.SupervisedLearning;
+import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.Perceptron;
 import org.neuroph.nnet.learning.BackPropagation;
 import org.neuroph.util.TransferFunctionType;
@@ -36,6 +35,20 @@ public class ArticleClassifier {
      */
     public static void main(String[] args) throws IOException {
         NeuralNetwork neuralNetwork = importOrCreateNeuralNetwork(NEURALNET_FILENAME, TRAININGSET_FILENAME);
+        DataSet trainingSet = importOrCreateDataSet(TRAININGSET_FILENAME);
+        List<DataSetRow> rows = trainingSet.getRows();
+        for (DataSetRow row : rows) {
+            double[] input = row.getInput();
+            neuralNetwork.setInput(input);
+            neuralNetwork.calculate();
+            double[] output = neuralNetwork.getOutput();
+            System.out.println("Input: " + Arrays.toString(input));
+            System.out.println("Output: "+ Arrays.toString(output));
+            
+            for (int i = 0; i < input.length; i++) {
+                
+            }
+        }
     }
 
     private static NeuralNetwork importOrCreateNeuralNetwork(String neuralNetFilename, String trainingSetFilename) throws IOException {
@@ -48,16 +61,20 @@ public class ArticleClassifier {
         } else {
             System.out.println("Creating Neural Network...");
             DataSet trainingSet = importOrCreateDataSet(trainingSetFilename);
-            neuralNet = new Perceptron(trainingSet.getInputSize(), trainingSet.getOutputSize(), TransferFunctionType.LINEAR);
+            neuralNet = new Perceptron(trainingSet.getInputSize(), trainingSet.getOutputSize(), TransferFunctionType.SIGMOID);
             BackPropagation lr = new BackPropagation();
-            lr.setMaxIterations(1000);
-            neuralNet.setLearningRule(lr);
-            // TODO: Verificar se necessita mais configurações
-//            System.out.println("Neural Network Learning...");
-//            neuralNet.learn(trainingSet);
-//            System.out.println("Neural Network Learning...OK");
+            lr.setMaxError(0.01);
+            lr.setLearningRate(0.5);
+            System.out.println("Neural Network Learning...");
+            neuralNet.learn(trainingSet, lr);
+            System.out.println("Neural Network Learning...OK");
+            double totalNetworkError = lr.getTotalNetworkError();
+            System.out.println("Neural Network Total Error: " + totalNetworkError);
+            int totalIterations = lr.getCurrentIteration();
+            System.out.println("Neural Network Total Iterations: " + totalIterations);
+            // TODO: Descomentar para persistir a rede neural
 //            neuralNet.save(neuralNetFilename);
-//            System.out.println("Creating Neural Network...OK");
+            System.out.println("Creating Neural Network...OK");
         }
         return neuralNet;
     }
@@ -73,9 +90,9 @@ public class ArticleClassifier {
             System.out.println("Creating TrainingSet...");
             Object[] expressionsAreas = parseTokens(TOKENS_AI_FILEPATH);
 //            TODO: Trocar para TRAINING_PDF_LIST_FILENAME para usar os PDFs classificados
-            trainingSet = parsePdfsToTrainingSet(PDFS_LIST_FILENAME, expressionsAreas);
+            trainingSet = parsePdfsToTrainingSet(TRAINING_PDF_LIST_FILENAME, expressionsAreas);
 //            TODO: Descomentar a linha abaixo para persistir o conjunto de treinamento;
-//            trainingSet.save(dataSetFilename);
+            trainingSet.save(dataSetFilename);
             System.out.println("Creating TrainingSet...OK");
         }
         return trainingSet;
@@ -95,36 +112,8 @@ public class ArticleClassifier {
             }
             File file = new File(INPUT_PDFS_DIR + filename);
             System.out.println(filename);
-            double[] counts = new double[expressionsAreas.length];
-            String text = new PDFTextStripper().getText(PDDocument.load(file));
-            String[] words = text.split("\\W+");
-            for (int i = 0; i < words.length; i++) {
-                for (int j = 0; j < expressionsAreas.length; j++) {
-                    List<String[]> expressions = (ArrayList<String[]>) expressionsAreas[j];
-                    for (String[] expression : expressions) {
-                        int k = 0;
-                        for (; k < expression.length; k++) {
-                            String token = expression[k];
-                            int wordIndex = i + k;
-                            if (wordIndex < words.length) {
-                                String word = words[wordIndex];
-                                if (!token.equals(word.toLowerCase())) {
-                                    break;
-                                }
-                            }
-                        }
-                        if (k == expression.length) {
-                            System.out.println(Arrays.toString(expression));
-                            counts[j]++;
-                        }
-                    }
-                }
-            }
-//            Por enquanto, xi = Area(i) Tokens Frequency
-//            Sugestão do Igarashi:
-//            xi = SUM(Area(i) Tokens Frequency)/Total Words
-            System.out.println(Arrays.toString(counts));
-            dataSet.addRow(counts, outputs);
+            double[] inputs = parsePDF(file, outputs, expressionsAreas);
+            dataSet.addRow(inputs, outputs);
             line = bf.readLine();
         }
         System.out.println("Parsing PDFs to Training Set...OK");
@@ -152,6 +141,38 @@ public class ArticleClassifier {
         }
         System.out.println("Parsing Tokens...OK");
         return expressionsAreas;
+    }
+
+    private static double[] parsePDF(File file, double[] outputs, Object[] expressionsAreas) throws IOException {
+        double[] counts = new double[expressionsAreas.length];
+        String text = new PDFTextStripper().getText(PDDocument.load(file));
+        String[] words = text.split("\\W+");
+        for (int i = 0; i < words.length; i++) {
+            for (int j = 0; j < expressionsAreas.length; j++) {
+                List<String[]> expressions = (ArrayList<String[]>) expressionsAreas[j];
+                for (String[] expression : expressions) {
+                    int k = 0;
+                    for (; k < expression.length; k++) {
+                        String token = expression[k];
+                        int wordIndex = i + k;
+                        if (wordIndex < words.length) {
+                            String word = words[wordIndex];
+                            if (!token.contains(word.toLowerCase())) {
+                                break;
+                            }
+                        }
+                    }
+                    if (k == expression.length) {
+//                            System.out.println(Arrays.toString(expression));
+                        counts[j]++;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < counts.length; i++) {
+            counts[i] = counts[i] / words.length;
+        }
+        return counts;
     }
 
 }
