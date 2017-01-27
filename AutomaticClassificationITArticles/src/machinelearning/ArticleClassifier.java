@@ -39,15 +39,15 @@ public class ArticleClassifier {
         List<DataSetRow> rows = trainingSet.getRows();
         for (DataSetRow row : rows) {
             double[] input = row.getInput();
+            double[] desiredOutput = row.getDesiredOutput();
             neuralNetwork.setInput(input);
             neuralNetwork.calculate();
             double[] output = neuralNetwork.getOutput();
             System.out.println("Input: " + Arrays.toString(input));
             System.out.println("Output: "+ Arrays.toString(output));
-            
-            for (int i = 0; i < input.length; i++) {
-                
-            }
+            double[] errors = new double[output.length];
+            Arrays.setAll(errors, i ->  output[i] - desiredOutput[i]);
+            System.out.println("Errors: " + Arrays.toString(errors));
         }
     }
 
