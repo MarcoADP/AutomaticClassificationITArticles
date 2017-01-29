@@ -68,7 +68,10 @@ public class ArticleClassifier {
             neuralNet = new Perceptron(trainingSet.getInputSize(), trainingSet.getOutputSize(), TransferFunctionType.SIGMOID);
 
             BackPropagation lr = new BackPropagation();
-            lr.setMaxError(0.01);
+            lr.setMaxIterations(1000000);
+//            lr.setMaxError(0.01);
+            lr.setMinErrorChange(0.1);
+            lr.setMinErrorChangeIterationsLimit(2);
             lr.setLearningRate(0.5);
 
             System.out.println("Neural Network Learning...");
@@ -82,7 +85,7 @@ public class ArticleClassifier {
             System.out.println("Neural Network Total Iterations: " + totalIterations);
 
             // TODO: Descomentar para persistir a rede neural
-//            neuralNet.save(neuralNetFilename);
+            neuralNet.save(neuralNetFilename);
             System.out.println("Creating Neural Network...OK");
         }
 
@@ -184,26 +187,6 @@ public class ArticleClassifier {
                         String[] expressionFromWords = Arrays.copyOfRange(words, i, i + expression.length);
                         counts[j] += countOrNot(expression, expressionFromWords);
                     }
-                    //[3D, scene, analysis]
-                    //[d, E, a]
-
-
-                    /*int k = 0;
-                    for (; k < expression.length; k++) {
-                        String token = expression[k];
-                        int wordIndex = i + k;
-                        if (wordIndex < words.length) {
-                            String word = words[wordIndex];
-                            if (!token.contains(word.toLowerCase())) {
-                                break;
-                            }
-                        }
-                    }
-
-                    if (k == expression.length) {
-//                            System.out.println(Arrays.toString(expression));
-                        counts[j]++;
-                    }*/
                 }
             }
         }
@@ -219,10 +202,11 @@ public class ArticleClassifier {
         for (int i = 0; i < expression.length; i++) {
             String token = expression[i];
             String word = expressionFromWords[i];
-            if (!token.contains(word.toLowerCase())) {
+            if (!word.toLowerCase().equals(token) && !word.toLowerCase().equals(token + 's')) {
                 return 0;
             }
         }
+        System.out.println(Arrays.toString(expression) + "==" + Arrays.toString(expressionFromWords));
         return 1;
     }
 
