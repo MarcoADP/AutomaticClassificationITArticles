@@ -530,10 +530,8 @@ public class FileTableController {
         result.setTitle("Resultado");
         result.setHeaderText(null);
         result.setGraphic(null);
-
         result.getDialogPane().setContent(resultController.getRoot());
         result.showAndWait();
 
-        System.out.println(classificationTask.file);
     }
 }
