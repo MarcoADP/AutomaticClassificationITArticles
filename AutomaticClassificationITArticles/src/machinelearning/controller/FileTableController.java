@@ -8,11 +8,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.util.Pair;
 import machinelearning.neuralnetwork.ArticleClassifier;
 
 import java.io.File;
@@ -86,12 +88,16 @@ public class FileTableController {
     private ArticleClassifier articleClassifier;
     private BooleanProperty isTrained = new SimpleBooleanProperty(false);
 
+    private ResultController resultController;
+
     @FXML
     private void initialize() {
         tableFiles.setItems(files);
         configBindings();
         configTable();
         setNThreads(DEFAULT_THREAD_NUM);
+
+        resultController = MainController.initController("../view/result.fxml");
 
         initArticleClassifier();
     }
@@ -302,6 +308,7 @@ public class FileTableController {
         private StringProperty classification = new SimpleStringProperty();
         private ObjectProperty<Status> status = new SimpleObjectProperty<>();
         private BooleanProperty selecionado = new SimpleBooleanProperty();
+        private double[] output;
 
         public ClassificationTask(File file, Status status, String classification) {
             this.file = file;
@@ -329,7 +336,9 @@ public class FileTableController {
         protected Void call() throws Exception {
             updateProgress(0, 1);
 
-            String classification = articleClassifier.classifyText(file);
+            Pair<String, double[]> pair = articleClassifier.classifyText(file);
+            String classification = pair.getKey();
+            output = pair.getValue();
 
             setClassification(classification);
 
@@ -425,6 +434,10 @@ public class FileTableController {
         public void setSelecionado(boolean selecionado) {
             this.selecionado.set(selecionado);
         }
+
+        public double[] getOutput() {
+            return output;
+        }
     }
 
     public class ClassificationAllTask extends Task<Void> {
@@ -512,6 +525,15 @@ public class FileTableController {
     }
 
     private void showClassificationInfo(ClassificationTask classificationTask) {
+        resultController.setData(classificationTask.file.getName(), articleClassifier.getCategories(), classificationTask.getOutput());
+        Alert result = new Alert(Alert.AlertType.INFORMATION);
+        result.setTitle("Resultado");
+        result.setHeaderText(null);
+        result.setGraphic(null);
+
+        result.getDialogPane().setContent(resultController.getRoot());
+        result.showAndWait();
+
         System.out.println(classificationTask.file);
     }
 }

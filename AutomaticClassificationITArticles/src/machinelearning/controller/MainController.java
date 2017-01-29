@@ -44,7 +44,7 @@ public class MainController {
     private void initialize() {
         INSTANCE = this;
 
-        sobreController = inicializarController("../view/sobre.fxml");
+        sobreController = initController("../view/sobre.fxml");
 
         configToggleGroup();
     }
@@ -106,8 +106,8 @@ public class MainController {
         sobre.showAndWait();
     }
 
-    private <T> T inicializarController(String fxml_path) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml_path));
+    public static <T> T initController(String fxml_path) {
+        FXMLLoader loader = new FXMLLoader(MainController.class.getResource(fxml_path));
         try {
             loader.load();
         } catch (IOException e) {

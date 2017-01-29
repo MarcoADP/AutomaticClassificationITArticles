@@ -1,5 +1,6 @@
 package machinelearning.neuralnetwork;
 
+import javafx.util.Pair;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.neuroph.core.NeuralNetwork;
@@ -36,7 +37,7 @@ public class ArticleClassifier {
         neuralNetwork = importOrCreateNeuralNetwork(NEURALNET_FILENAME, TRAININGSET_FILENAME);
     }
 
-    public String classifyText(File file) throws IOException {
+    public Pair<String, double[]> classifyText(File file) throws IOException {
         double[] input = parsePDF(file, null, expressionsAreas);
         neuralNetwork.setInput(input);
 
@@ -49,10 +50,10 @@ public class ArticleClassifier {
         System.out.println("Output: " + Arrays.toString(output));
 
         if (true) {
-            return "Inteligência Artificial";
+            return new Pair<>("Inteligência Artificial", output);
         }
 
-        return "Outros";
+        return new Pair<>("Outros", output);
     }
 
     private NeuralNetwork importOrCreateNeuralNetwork(String neuralNetFilename, String trainingSetFilename) throws IOException {
