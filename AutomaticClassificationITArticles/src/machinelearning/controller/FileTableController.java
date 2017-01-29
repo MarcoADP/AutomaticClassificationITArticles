@@ -1,7 +1,6 @@
 package machinelearning.controller;
 
 
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.*;
@@ -17,7 +16,6 @@ import javafx.scene.layout.*;
 import machinelearning.neuralnetwork.ArticleClassifier;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -55,6 +53,11 @@ public class FileTableController {
     private Label labelNumNotIA;
 
     @FXML
+    private Label labelTraining;
+    @FXML
+    private ProgressIndicator progressIndTraining;
+
+    @FXML
     private ProgressBar progressBar;
 
     @FXML
@@ -81,6 +84,7 @@ public class FileTableController {
     private int nThreads;
 
     private ArticleClassifier articleClassifier;
+    private BooleanProperty isTrained = new SimpleBooleanProperty(false);
 
     @FXML
     private void initialize() {
@@ -89,9 +93,39 @@ public class FileTableController {
         configTable();
         setNThreads(DEFAULT_THREAD_NUM);
 
+        initArticleClassifier();
+    }
+
+    private void initArticleClassifier() {
+        labelTraining.setText("");
+        isTrained.set(false);
         try {
-            articleClassifier = new ArticleClassifier();
-        } catch (IOException e) {
+            Task<Void> task = new Task<Void>(){
+                @Override
+                protected Void call() throws Exception {
+                    articleClassifier = new ArticleClassifier();
+                    return null;
+                }
+
+                @Override
+                protected void succeeded() {
+                    super.succeeded();
+                    labelTraining.setText("OK");
+                    progressIndTraining.setVisible(false);
+                    isTrained.set(true);
+                }
+            };
+
+            ExecutorService executor = Executors.newSingleThreadExecutor(r -> {
+                Thread t = new Thread(r);
+                t.setDaemon(true);
+                return t;
+            });
+
+            executor.execute(task);
+
+        } catch (Exception e) {
+            MainController.INSTANCE.showErrorMessage("Erro", "Erro no treinamento da rede neural.");
             e.printStackTrace();
         }
     }
@@ -107,8 +141,7 @@ public class FileTableController {
         labelNumIA.textProperty().bind(Bindings.format("Classificados como Inteligência Artificial: %d", numClassifiedIA));
         labelNumNotIA.textProperty().bind(Bindings.format("Classificados como Outros: %d", numClassifiedNotIA));
 
-
-        btnAnalisar.disableProperty().bind(tasksRunning.or(selectedFilesSizeBinding.isEqualTo(0)));
+        btnAnalisar.disableProperty().bind(isTrained.not().or(tasksRunning.or(selectedFilesSizeBinding.isEqualTo(0))));
         btnCancelar.disableProperty().bind(tasksRunning.not());
         btnRemover.disableProperty().bind(tasksRunning.or(selectedFilesSizeBinding.isEqualTo(0)));
     }

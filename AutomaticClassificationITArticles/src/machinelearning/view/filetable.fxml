@@ -5,12 +5,14 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
@@ -25,14 +27,16 @@
         </Separator>
         <TableView fx:id="tableFiles" editable="true" prefHeight="150.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="tableColumnCheckBox" editable="true" minWidth="40.0" maxWidth="40.0"/>
-                <TableColumn fx:id="tableColumnFile" prefWidth="350.0" style="-fx-alignment: center"
+                <TableColumn fx:id="tableColumnCheckBox" editable="true" maxWidth="40.0" minWidth="40.0"/>
+                <TableColumn fx:id="tableColumnFile" maxWidth="700" prefWidth="350.0" style="-fx-alignment: center"
                              text="Caminho do Arquivo"/>
-                <TableColumn fx:id="tableColumnClassification" prefWidth="200" style="-fx-alignment: center"
-                             styleClass="label-result" text="Classificação"/>
+                <TableColumn fx:id="tableColumnClassification" maxWidth="350" prefWidth="200"
+                             style="-fx-alignment: center" styleClass="label-result" text="Classificação"/>
                 <!--<TableColumn fx:id="tableColumnProgresso" prefWidth="150" text="Progresso"/>-->
-                <TableColumn fx:id="tableColumnStatus" prefWidth="100" style="-fx-alignment: center" text="Status"/>
-                <TableColumn fx:id="tableColumnAction" minWidth="80" maxWidth="80" style="-fx-alignment: center" text="Resultado"/>
+                <TableColumn fx:id="tableColumnStatus" maxWidth="250" prefWidth="100" style="-fx-alignment: center"
+                             text="Status"/>
+                <TableColumn fx:id="tableColumnAction" maxWidth="120" minWidth="80" style="-fx-alignment: center"
+                             text="Resultado"/>
             </columns>
         </TableView>
         <HBox prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
@@ -59,6 +63,7 @@
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES"/>
@@ -71,6 +76,14 @@
                        GridPane.columnIndex="1"/>
                 <Label fx:id="labelNumNotIA" styleClass="h3" text="Classificados como Outros: 0 "
                        GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <HBox alignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+                    <children>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label contentDisplay="RIGHT" styleClass="h3" text="Treinamento da Rede Neural: "/>
+                        <Label fx:id="labelTraining" styleClass="h3, label-green" text="OK"/>
+                        <ProgressIndicator fx:id="progressIndTraining" prefHeight="25.0" prefWidth="25.0"/>
+                    </children>
+                </HBox>
             </children>
         </GridPane>
         <ButtonBar>

@@ -149,6 +149,11 @@
     -fx-font-size: 14;
 }
 
+.label-green {
+    -fx-font-weight: bold;
+    -fx-text-fill: green;
+}
+
 /******************
       BUTTON
 *******************/

@@ -84,6 +84,13 @@ public class MainController {
         alert.showAndWait();
     }
 
+    public void showErrorMessage(String title, String msg) {
+        Alert error = new Alert(Alert.AlertType.ERROR);
+        error.setTitle(title);
+        error.setContentText(msg);
+        error.showAndWait();
+    }
+
     @FXML
     public void handleMenuItemSair() {
         Platform.exit();
