@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import org.neuroph.nnet.MultiLayerPerceptron;
 
 
 public class ArticleClassifier {
@@ -23,6 +24,7 @@ public class ArticleClassifier {
     private static final String TRAINING_PDF_LIST_FILENAME = "./config/trainlist";
     private static final String INPUT_PDFS_DIR = "inputPdfs/";
     private static final String TOKENS_AI_FILEPATH = "./config/tokens";
+    private static final int TOTAL_HIDDEN_LAYERS = 7;
 
     private NeuralNetwork neuralNetwork;
 
@@ -65,13 +67,14 @@ public class ArticleClassifier {
             System.out.println("Creating Neural Network...");
             DataSet trainingSet = importOrCreateDataSet(trainingSetFilename);
 
-            neuralNet = new Perceptron(trainingSet.getInputSize(), trainingSet.getOutputSize(), TransferFunctionType.SIGMOID);
+//            neuralNet = new Perceptron(trainingSet.getInputSize(), trainingSet.getOutputSize(), TransferFunctionType.SIGMOID);
+            neuralNet = new MultiLayerPerceptron(TransferFunctionType.SIGMOID, trainingSet.getInputSize(), TOTAL_HIDDEN_LAYERS, trainingSet.getOutputSize());
 
             BackPropagation lr = new BackPropagation();
             lr.setMaxIterations(1000000);
-//            lr.setMaxError(0.01);
-            lr.setMinErrorChange(0.1);
-            lr.setMinErrorChangeIterationsLimit(2);
+            lr.setMaxError(1E-10);
+//            lr.setMinErrorChange(0.1);
+//            lr.setMinErrorChangeIterationsLimit(2);
             lr.setLearningRate(0.5);
 
             System.out.println("Neural Network Learning...");
@@ -85,7 +88,7 @@ public class ArticleClassifier {
             System.out.println("Neural Network Total Iterations: " + totalIterations);
 
             // TODO: Descomentar para persistir a rede neural
-            neuralNet.save(neuralNetFilename);
+//            neuralNet.save(neuralNetFilename);
             System.out.println("Creating Neural Network...OK");
         }
 
