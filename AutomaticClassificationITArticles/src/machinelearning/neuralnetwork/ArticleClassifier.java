@@ -14,7 +14,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
+import org.neuroph.nnet.learning.MomentumBackpropagation;
 
 
 public class ArticleClassifier {
@@ -70,13 +72,14 @@ public class ArticleClassifier {
 
 //            neuralNet = new Perceptron(trainingSet.getInputSize(), trainingSet.getOutputSize(), TransferFunctionType.SIGMOID);
             neuralNet = new MultiLayerPerceptron(TransferFunctionType.SIGMOID, trainingSet.getInputSize(), TOTAL_HIDDEN_LAYERS, trainingSet.getOutputSize());
-
-            BackPropagation lr = new BackPropagation();
+                
+            MomentumBackpropagation lr = new MomentumBackpropagation();
+            lr.setMomentum(0.7);
             lr.setMaxIterations(1000000);
-            lr.setMaxError(1E-10);
+            lr.setMaxError(0.01);
 //            lr.setMinErrorChange(0.1);
 //            lr.setMinErrorChangeIterationsLimit(2);
-            lr.setLearningRate(0.5);
+            lr.setLearningRate(0.3);
 
             System.out.println("Neural Network Learning...");
             neuralNet.learn(trainingSet, lr);
@@ -108,6 +111,7 @@ public class ArticleClassifier {
             System.out.println("Creating TrainingSet...");
             trainingSet = parsePdfsToTrainingSet(TRAINING_PDF_LIST_FILENAME, expressionsAreas);
             trainingSet.save(dataSetFilename);
+            trainingSet.saveAsTxt(dataSetFilename + ".csv", ",");
             System.out.println("Creating TrainingSet...OK");
         }
 
@@ -118,12 +122,12 @@ public class ArticleClassifier {
         System.out.println("Parsing PDFs to Training Set...");
 
         DataSet dataSet = new DataSet(expressionsAreas.length, expressionsAreas.length);
-        double[] outputs = new double[expressionsAreas.length];
 
         BufferedReader bf = new BufferedReader(new FileReader(new File(pdfListFilename)));
         String line = bf.readLine();
 
         while (line != null) {
+            double[] outputs = new double[expressionsAreas.length];
             String[] splitted = line.split(" ");
 
             String filename = splitted[0];
@@ -134,13 +138,11 @@ public class ArticleClassifier {
 
             File file = new File(INPUT_PDFS_DIR + filename);
             System.out.println(filename);
-
+            
             double[] inputs = parsePDF(file, outputs, expressionsAreas);
-
             dataSet.addRow(inputs, outputs);
             line = bf.readLine();
         }
-
         System.out.println("Parsing PDFs to Training Set...OK");
         return dataSet;
     }
@@ -210,7 +212,6 @@ public class ArticleClassifier {
                 return 0;
             }
         }
-        System.out.println(Arrays.toString(expression) + "==" + Arrays.toString(expressionFromWords));
         return 1;
     }
 
