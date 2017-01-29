@@ -9,8 +9,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
-import machinelearning.readers.PDFReader;
 import machinelearning.util.ColorStyleTransition;
+import machinelearning.util.Util;
 
 import java.io.File;
 import java.util.Arrays;
@@ -96,7 +96,7 @@ public class DragDropController {
     }
 
     private void sendFiles(List<File> files) {
-        List<File> pdfFiles = files.stream().filter(PDFReader::isPDF).collect(Collectors.toList());
+        List<File> pdfFiles = files.stream().filter(Util::isPDF).collect(Collectors.toList());
 
         Platform.runLater(() -> MainController.INSTANCE.addFilesToTable(pdfFiles));
     }

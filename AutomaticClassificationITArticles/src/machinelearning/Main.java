@@ -5,9 +5,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import java.awt.*;
 
 
 public class Main extends Application {
@@ -35,7 +35,7 @@ public class Main extends Application {
 
             Scene scene = new Scene(root);
 
-            double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+            double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
 
             stage.setMinHeight(ALTURA);
             stage.setMinWidth(LARGURA);

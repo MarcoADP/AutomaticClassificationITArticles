@@ -25,14 +25,14 @@
         </Separator>
         <TableView fx:id="tableFiles" editable="true" prefHeight="150.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="tableColumnCheckBox" editable="true" prefWidth="40.0"/>
-                <TableColumn fx:id="tableColumnFile" prefWidth="350.0" text="Caminho do Arquivo"
-                             style="-fx-alignment: center"/>
-                <TableColumn fx:id="tableColumnClassificacao" prefWidth="200" style="-fx-alignment: center"
+                <TableColumn fx:id="tableColumnCheckBox" editable="true" minWidth="40.0" maxWidth="40.0"/>
+                <TableColumn fx:id="tableColumnFile" prefWidth="350.0" style="-fx-alignment: center"
+                             text="Caminho do Arquivo"/>
+                <TableColumn fx:id="tableColumnClassification" prefWidth="200" style="-fx-alignment: center"
                              styleClass="label-result" text="Classificação"/>
                 <!--<TableColumn fx:id="tableColumnProgresso" prefWidth="150" text="Progresso"/>-->
                 <TableColumn fx:id="tableColumnStatus" prefWidth="100" style="-fx-alignment: center" text="Status"/>
-                <TableColumn fx:id="tableColumnAction" prefWidth="80" style="-fx-alignment: center" text="Resultado"/>
+                <TableColumn fx:id="tableColumnAction" minWidth="80" maxWidth="80" style="-fx-alignment: center" text="Resultado"/>
             </columns>
         </TableView>
         <HBox prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
@@ -40,7 +40,7 @@
                 <Label prefHeight="25.0" styleClass="h3" text="Progresso:" HBox.hgrow="NEVER"/>
                 <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" minHeight="25.0" prefHeight="25.0"
                              prefWidth="400.0" progress="0.0" HBox.hgrow="ALWAYS"/>
-                <Label fx:id="labelAnalisando" prefHeight="25.0" styleClass="h3" text="0/0" HBox.hgrow="NEVER"/>
+                <Label fx:id="labelAnalyzing" prefHeight="25.0" styleClass="h3" text="0/0" HBox.hgrow="NEVER"/>
             </children>
             <padding>
                 <Insets top="10.0"/>
@@ -66,7 +66,7 @@
             </rowConstraints>
             <children>
                 <Label fx:id="labelNumFiles" styleClass="h3" text="Número de arquivos: 0"/>
-                <Label fx:id="labelTotalAnalisados" styleClass="h3" text="Total analisados: 0 " GridPane.rowIndex="1"/>
+                <Label fx:id="labelTotalAnalyzed" styleClass="h3" text="Total analisados: 0 " GridPane.rowIndex="1"/>
                 <Label fx:id="labelNumIA" styleClass="h3" text="Classificados como Inteligência Artificial: 0"
                        GridPane.columnIndex="1"/>
                 <Label fx:id="labelNumNotIA" styleClass="h3" text="Classificados como Outros: 0 "

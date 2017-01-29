@@ -10,16 +10,20 @@
 <?import javafx.scene.text.Font?>
 
 <VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="228.0" prefWidth="396.0" stylesheets="@app.css" spacing="4.0" xmlns="http://javafx.com/javafx/8.0.60"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="machinelearning.controller.SobreController">
+      spacing="4.0" stylesheets="@app.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="machinelearning.controller.SobreController">
     <children>
-        <GridPane>
+        <GridPane hgap="15.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0"
+                                   prefWidth="144.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="220.0" minWidth="10.0" prefWidth="217.0"/>
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints maxHeight="47.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES"/>
                 <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="13.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
@@ -27,21 +31,45 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <Label contentDisplay="CENTER" text="Classificador de Artigos" GridPane.halignment="CENTER"
-                       GridPane.valignment="CENTER">
+                <Label contentDisplay="CENTER" text="Classificador de Artigos" GridPane.columnSpan="2147483647"
+                       GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <font>
                         <Font size="32.0"/>
                     </font>
                 </Label>
-                <Separator prefWidth="200.0" GridPane.rowIndex="1"/>
-                <Label text="Universidade Estadual de Maringá" GridPane.halignment="CENTER" GridPane.rowIndex="2"
-                       GridPane.valignment="CENTER"/>
-                <Label text="Curso: Ciência da Computação" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
-                <Label text="Disciplina: Inteligência Artificial II" GridPane.halignment="CENTER"
-                       GridPane.rowIndex="4"/>
-                <Label text="Professor: Wagner Igarashi" GridPane.halignment="CENTER" GridPane.rowIndex="5"/>
-                <Label text="Alunos: João Otávio Biondo - Marco Aurélio Deoldoto Paulino" GridPane.halignment="CENTER"
-                       GridPane.rowIndex="6"/>
+                <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1"/>
+                <Label text="Universidade Estadual de Maringá" GridPane.columnSpan="2147483647"
+                       GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <Label text="Ciência da Computação" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <Label text="Inteligência Artificial II" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Label text="Wagner Igarashi" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <Label text="João Otávio Biondo" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <Label text="Marco Antônio Kuchla Braga" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                <Label text="Marco Aurélio Deoldoto Paulino" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+                <Label text="Curso:" GridPane.rowIndex="3">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
+                <Label text="Disciplina:" GridPane.rowIndex="4">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
+                <Label text="Professor:" GridPane.rowIndex="5">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
+                <Label text="Alunos: " GridPane.rowIndex="6">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
             </children>
         </GridPane>
     </children>

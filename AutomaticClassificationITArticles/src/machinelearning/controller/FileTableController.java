@@ -1,6 +1,7 @@
 package machinelearning.controller;
 
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.*;
@@ -13,9 +14,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import machinelearning.neuralnet.NeuralNetwork;
+import machinelearning.neuralnetwork.ArticleClassifier;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,20 +35,25 @@ public class FileTableController {
     @FXML
     private TableColumn<ClassificationTask, File> tableColumnFile;
     @FXML
-    private TableColumn<ClassificationTask, String> tableColumnClassificacao;
+    private TableColumn<ClassificationTask, String> tableColumnClassification;
     @FXML
     private TableColumn<ClassificationTask, Boolean> tableColumnAction;
     //@FXML
     //private TableColumn<ClassificationTask, Double> tableColumnProgresso;
     @FXML
     private TableColumn<ClassificationTask, Status> tableColumnStatus;
-    @FXML
-    private Label labelNumFiles;
 
     @FXML
-    private Label labelAnalisando;
+    private Label labelNumFiles;
     @FXML
-    private Label labelTotalAnalisados;
+    private Label labelAnalyzing;
+    @FXML
+    private Label labelTotalAnalyzed;
+    @FXML
+    private Label labelNumIA;
+    @FXML
+    private Label labelNumNotIA;
+
     @FXML
     private ProgressBar progressBar;
 
@@ -62,13 +69,18 @@ public class FileTableController {
     private ObservableList<ClassificationTask> selectedFiles = FXCollections.observableArrayList();
     private IntegerProperty numTasksCompleted = new SimpleIntegerProperty(0);
 
-    private IntegerProperty numTotalAnalisados = new SimpleIntegerProperty(0);
+    private IntegerProperty numTotalAnalyzed = new SimpleIntegerProperty(0);
     private BooleanProperty tasksRunning = new SimpleBooleanProperty(false);
+
+    private IntegerProperty numClassifiedIA = new SimpleIntegerProperty(0);
+    private IntegerProperty numClassifiedNotIA = new SimpleIntegerProperty(0);
 
     private ClassificationAllTask cTask;
     private static final int DEFAULT_THREAD_NUM = 1;
 
     private int nThreads;
+
+    private ArticleClassifier articleClassifier;
 
     @FXML
     private void initialize() {
@@ -76,6 +88,12 @@ public class FileTableController {
         configBindings();
         configTable();
         setNThreads(DEFAULT_THREAD_NUM);
+
+        try {
+            articleClassifier = new ArticleClassifier();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void configBindings() {
@@ -83,8 +101,12 @@ public class FileTableController {
         IntegerBinding selectedFilesSizeBinding = Bindings.size(selectedFiles);
 
         labelNumFiles.textProperty().bind(Bindings.format("Número de arquivos: %d", filesSizeBinding));
-        labelAnalisando.textProperty().bind(Bindings.format("Analisando: %d/%d", numTasksCompleted, selectedFilesSizeBinding));
-        labelTotalAnalisados.textProperty().bind(Bindings.format("Total analisados: %d", numTotalAnalisados));
+        labelAnalyzing.textProperty().bind(Bindings.format("Analisando: %d/%d", numTasksCompleted, selectedFilesSizeBinding));
+        labelTotalAnalyzed.textProperty().bind(Bindings.format("Total analisados: %d", numTotalAnalyzed));
+
+        labelNumIA.textProperty().bind(Bindings.format("Classificados como Inteligência Artificial: %d", numClassifiedIA));
+        labelNumNotIA.textProperty().bind(Bindings.format("Classificados como Outros: %d", numClassifiedNotIA));
+
 
         btnAnalisar.disableProperty().bind(tasksRunning.or(selectedFilesSizeBinding.isEqualTo(0)));
         btnCancelar.disableProperty().bind(tasksRunning.not());
@@ -92,6 +114,8 @@ public class FileTableController {
     }
 
     private void configTable() {
+        tableFiles.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         tableColumnCheckBox.setCellValueFactory(new PropertyValueFactory<>("selecionado"));
         tableColumnCheckBox.setCellFactory(CheckBoxTableCell.forTableColumn(tableColumnCheckBox));
 
@@ -104,8 +128,8 @@ public class FileTableController {
         //tableColumnProgresso.setCellValueFactory(new PropertyValueFactory<>("progress"));
         //tableColumnProgresso.setCellFactory(ProgressBarTableCell.forTableColumn());
 
-        tableColumnClassificacao.setCellValueFactory(new PropertyValueFactory<>("classification"));
-        tableColumnClassificacao.setCellFactory(param -> {
+        tableColumnClassification.setCellValueFactory(new PropertyValueFactory<>("classification"));
+        tableColumnClassification.setCellFactory(param -> {
             return new TableCell<ClassificationTask, String>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -115,7 +139,7 @@ public class FileTableController {
                         setText(null);
                     } else {
                         setText(item);
-                        if (item.toUpperCase().contains("NÃO")) {
+                        if (item.toUpperCase().contains("OUTRO")) {
                             getStyleClass().add("black");
                         }
                     }
@@ -272,8 +296,7 @@ public class FileTableController {
         protected Void call() throws Exception {
             updateProgress(0, 1);
 
-            NeuralNetwork neuralNetwork = new NeuralNetwork(new File("ArtificialIntelligenceAreas.txt"));
-            String classification = neuralNetwork.classificarTexto(file);
+            String classification = articleClassifier.classifyText(file);
 
             setClassification(classification);
 
@@ -287,7 +310,13 @@ public class FileTableController {
             this.updateProgress(1, 1);
 
             numTasksCompleted.setValue(numTasksCompleted.get() + 1);
-            numTotalAnalisados.set(numTotalAnalisados.get() + 1);
+            numTotalAnalyzed.set(numTotalAnalyzed.get() + 1);
+
+            if (classification.get().toUpperCase().contains("OUTRO")) {
+                numClassifiedNotIA.set(numClassifiedNotIA.get() + 1);
+            } else {
+                numClassifiedIA.set(numClassifiedIA.get() + 1);
+            }
         }
 
         @Override
@@ -420,7 +449,7 @@ public class FileTableController {
             onExecutorServiceFinished();
         }
     }
-    
+
     private class ButtonCell extends TableCell<ClassificationTask, Boolean> {
         final Button btnShow = new Button("Visualizar");
         final StackPane paddedButton = new StackPane();
@@ -434,7 +463,8 @@ public class FileTableController {
             btnShow.getStyleClass().add("btn-action");
         }
 
-        @Override protected void updateItem(Boolean item, boolean empty) {
+        @Override
+        protected void updateItem(Boolean item, boolean empty) {
             super.updateItem(item, empty);
             btnShow.disableProperty().unbind();
 
