@@ -8,6 +8,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Map;
 
 public class ResultController {

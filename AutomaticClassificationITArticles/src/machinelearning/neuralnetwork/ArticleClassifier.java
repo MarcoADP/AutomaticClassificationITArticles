@@ -5,15 +5,14 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.data.DataSet;
+import org.neuroph.nnet.MultiLayerPerceptron;
+import org.neuroph.nnet.learning.MomentumBackpropagation;
 import org.neuroph.util.TransferFunctionType;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import org.neuroph.nnet.MultiLayerPerceptron;
-import org.neuroph.nnet.learning.MomentumBackpropagation;
 
 
 public class ArticleClassifier {
@@ -37,7 +36,10 @@ public class ArticleClassifier {
     }
 
     public Pair<String, double[]> classifyText(File file) throws IOException {
-        double[] input = parsePDF(file, null, expressionsAreas);
+        double[] input = parsePDF(file, expressionsAreas);
+
+        NeuralNetwork neuralNetwork = importOrCreateNeuralNetwork(NEURALNET_FILENAME, TRAININGSET_FILENAME);
+
         neuralNetwork.setInput(input);
 
         System.out.println("Calculating neural network for: " + file.getName());
@@ -48,11 +50,18 @@ public class ArticleClassifier {
         System.out.println("Input: " + Arrays.toString(input));
         System.out.println("Output: " + Arrays.toString(output));
 
-        if (true) {
-            return new Pair<>("Inteligência Artificial", output);
-        }
+        String iaOrNot = IAorNot(output);
 
-        return new Pair<>("Outros", output);
+        return new Pair<>(iaOrNot, Arrays.copyOf(output, output.length));
+    }
+
+    private String IAorNot(double[] output) {
+        for (double out : output) {
+            if (out > 0.1) {
+                return "Inteligência Artificial";
+            }
+        }
+        return "Outros";
     }
 
     private NeuralNetwork importOrCreateNeuralNetwork(String neuralNetFilename, String trainingSetFilename) throws IOException {
@@ -131,8 +140,8 @@ public class ArticleClassifier {
 
             File file = new File(INPUT_PDFS_DIR + filename);
             System.out.println(filename);
-            
-            double[] inputs = parsePDF(file, outputs, expressionsAreas);
+
+            double[] inputs = parsePDF(file, expressionsAreas);
             dataSet.addRow(inputs, outputs);
             line = bf.readLine();
         }
@@ -174,7 +183,7 @@ public class ArticleClassifier {
         return expressionsAreas;
     }
 
-    private double[] parsePDF(File file, double[] outputs, Object[] expressionsAreas) throws IOException {
+    private double[] parsePDF(File file, Object[] expressionsAreas) throws IOException {
         double[] counts = new double[expressionsAreas.length];
         String text = new PDFTextStripper().getText(PDDocument.load(file));
         String[] words = text.split("\\W+");
