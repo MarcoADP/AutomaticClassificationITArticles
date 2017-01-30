@@ -5,8 +5,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.data.DataSet;
-import org.neuroph.nnet.Perceptron;
-import org.neuroph.nnet.learning.BackPropagation;
 import org.neuroph.util.TransferFunctionType;
 
 import java.io.BufferedReader;
@@ -14,7 +12,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
 
@@ -27,7 +24,7 @@ public class ArticleClassifier {
     private static final String TRAINING_PDF_LIST_FILENAME = "./config/trainlist";
     private static final String INPUT_PDFS_DIR = "inputPdfs/";
     private static final String TOKENS_AI_FILEPATH = "./config/tokens";
-    private static final int TOTAL_HIDDEN_LAYERS = 7;
+    private static final int TOTAL_HIDDEN_LAYERS = 15;
 
     private NeuralNetwork neuralNetwork;
 
@@ -70,16 +67,12 @@ public class ArticleClassifier {
             System.out.println("Creating Neural Network...");
             DataSet trainingSet = importOrCreateDataSet(trainingSetFilename);
 
-//            neuralNet = new Perceptron(trainingSet.getInputSize(), trainingSet.getOutputSize(), TransferFunctionType.SIGMOID);
             neuralNet = new MultiLayerPerceptron(TransferFunctionType.SIGMOID, trainingSet.getInputSize(), TOTAL_HIDDEN_LAYERS, trainingSet.getOutputSize());
-                
+
             MomentumBackpropagation lr = new MomentumBackpropagation();
-            lr.setMomentum(0.7);
-            lr.setMaxIterations(1000000);
-            lr.setMaxError(0.01);
-//            lr.setMinErrorChange(0.1);
-//            lr.setMinErrorChangeIterationsLimit(2);
-            lr.setLearningRate(0.3);
+            lr.setMomentum(0.5);
+            lr.setMaxError(0.05);
+            lr.setLearningRate(0.25);
 
             System.out.println("Neural Network Learning...");
             neuralNet.learn(trainingSet, lr);
@@ -92,7 +85,7 @@ public class ArticleClassifier {
             System.out.println("Neural Network Total Iterations: " + totalIterations);
 
             // TODO: Descomentar para persistir a rede neural
-//            neuralNet.save(neuralNetFilename);
+            neuralNet.save(neuralNetFilename);
             System.out.println("Creating Neural Network...OK");
         }
 
