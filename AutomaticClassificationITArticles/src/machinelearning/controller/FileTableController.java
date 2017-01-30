@@ -8,12 +8,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.*;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import machinelearning.neuralnetwork.ArticleClassifier;
 
@@ -90,6 +96,9 @@ public class FileTableController {
 
     private ResultController resultController;
 
+    private BarChart<String, Number> barChart;
+    private Stage barChartStage;
+
     @FXML
     private void initialize() {
         tableFiles.setItems(files);
@@ -106,7 +115,7 @@ public class FileTableController {
         labelTraining.setText("");
         isTrained.set(false);
         try {
-            Task<Void> task = new Task<Void>(){
+            Task<Void> task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
                     articleClassifier = new ArticleClassifier();
@@ -119,6 +128,7 @@ public class FileTableController {
                     labelTraining.setText("OK");
                     progressIndTraining.setVisible(false);
                     isTrained.set(true);
+                    createChart();
                 }
             };
 
@@ -359,6 +369,13 @@ public class FileTableController {
             } else {
                 numClassifiedIA.set(numClassifiedIA.get() + 1);
             }
+
+            for (int i = 0; i < output.length; i++) {
+                if (output[i] > 0.5) {
+                    XYChart.Data<String, Number> data = barChart.getData().get(0).getData().get(i);
+                    data.setYValue(data.getYValue().longValue() + 1);
+                }
+            }
         }
 
         @Override
@@ -532,6 +549,44 @@ public class FileTableController {
         result.setGraphic(null);
         result.getDialogPane().setContent(resultController.getRoot());
         result.showAndWait();
+    }
 
+    private void createChart() {
+        barChartStage = new Stage();
+        barChartStage.setTitle("Gráfico");
+
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+
+        barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setTitle("Categorias");
+        barChart.setLegendVisible(false);
+
+        xAxis.setLabel("Categoria");
+        yAxis.setLabel("Total");
+
+        XYChart.Series series = new XYChart.Series();
+
+        for (String category : articleClassifier.getCategories()) {
+            XYChart.Data<String, Number> data = new XYChart.Data<>(category, 0);
+            series.getData().add(data);
+        }
+
+        Scene scene = new Scene(barChart, 800, 600);
+        barChart.getData().add(series);
+        barChartStage.setScene(scene);
+        barChartStage.hide();
+    }
+
+    public void showOrHideBarChart() {
+        if (barChartStage.isShowing()) {
+            barChartStage.hide();
+        } else {
+            barChartStage.show();
+        }
+    }
+
+    public Stage getBarChartStage() {
+        return barChartStage;
     }
 }

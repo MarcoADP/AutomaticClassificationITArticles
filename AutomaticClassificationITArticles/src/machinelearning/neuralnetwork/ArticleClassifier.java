@@ -8,11 +8,14 @@ import org.neuroph.core.data.DataSet;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
 import org.neuroph.util.TransferFunctionType;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class ArticleClassifier {
@@ -27,7 +30,7 @@ public class ArticleClassifier {
 
     private NeuralNetwork neuralNetwork;
 
-    private Map<Integer, String> categories;
+    private List<String> categories;
     private Object[] expressionsAreas;
 
     public ArticleClassifier() throws IOException {
@@ -158,12 +161,12 @@ public class ArticleClassifier {
         int numAreas = Integer.parseInt(bf.readLine());
         Object expressionsAreas[] = new Object[numAreas];
 
-        categories = new HashMap<>();
+        categories = new ArrayList<>();
 
         for (int i = 0; i < numAreas; i++) {
             String category = bf.readLine();
             if (category != null) {
-                categories.put(i, category.substring(1, category.lastIndexOf(']')));
+                categories.add(category.substring(1, category.lastIndexOf(']')));
             }
 
             List<String[]> expression = new ArrayList<>();
@@ -217,7 +220,7 @@ public class ArticleClassifier {
         return 1;
     }
 
-    public Map<Integer, String> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 }

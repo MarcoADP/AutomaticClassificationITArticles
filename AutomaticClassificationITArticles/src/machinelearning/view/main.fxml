@@ -27,6 +27,9 @@
                             </items>
                         </Menu>
                         <SeparatorMenuItem/>
+                        <RadioMenuItem fx:id="radioMenuItemBarChart" onAction="#handleMenuItemGrafico"
+                                       mnemonicParsing="false" text="Mostrar/Esconder Gráfico"/>
+                        <SeparatorMenuItem/>
                         <MenuItem mnemonicParsing="false" onAction="#handleMenuItemSair" text="Sair"/>
                     </items>
                 </Menu>

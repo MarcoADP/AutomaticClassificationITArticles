@@ -8,8 +8,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 
 public class ResultController {
 
@@ -32,15 +31,19 @@ public class ResultController {
 
     }
 
-    public void setData(String filename, Map<Integer, String> categories, double[] values) {
+    public void setData(String filename, List<String> categories, double[] values) {
         gridPane.getChildren().clear();
         labelTitle.setText("Classificação para: " + filename);
+
         gridPane.add(labelTitle, 0, 0);
         gridPane.add(separator, 0, 1);
         gridPane.add(labelCategory, 0, 2);
         gridPane.add(labelResult, 1, 2);
+
         RowConstraints rowConstraints = new RowConstraints(20, 20, 30);
+
         DecimalFormat df = new DecimalFormat("#.###### %");
+
         for (int i = 0; i < values.length; i++) {
             Label labelCategory = new Label(categories.get(i) + ": ");
             labelCategory.getStyleClass().add("h3");

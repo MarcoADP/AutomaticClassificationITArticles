@@ -15,6 +15,7 @@ import java.util.List;
 
 public class MainController {
 
+
     @FXML
     private BorderPane borderPane;
 
@@ -37,6 +38,9 @@ public class MainController {
     private RadioMenuItem radioMenuItemT16;
 
     private ToggleGroup toggleGroup;
+
+    @FXML
+    private RadioMenuItem radioMenuItemBarChart;
 
     public static MainController INSTANCE;
 
@@ -104,6 +108,11 @@ public class MainController {
         sobre.setGraphic(null);
         sobre.getDialogPane().setContent(sobreController.getRoot());
         sobre.showAndWait();
+    }
+
+    @FXML
+    private void handleMenuItemGrafico() {
+        fileTableController.showOrHideBarChart();
     }
 
     public static <T> T initController(String fxml_path) {
