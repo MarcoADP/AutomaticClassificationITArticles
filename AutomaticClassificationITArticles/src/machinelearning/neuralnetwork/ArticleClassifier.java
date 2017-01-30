@@ -82,6 +82,7 @@ public class ArticleClassifier {
             neuralNet = new MultiLayerPerceptron(TransferFunctionType.SIGMOID, trainingSet.getInputSize(), TOTAL_HIDDEN_LAYERS, trainingSet.getOutputSize());
 
             MomentumBackpropagation lr = new MomentumBackpropagation();
+            lr.setMaxIterations(1000000);
             lr.setMomentum(0.5);
             lr.setMaxError(0.05);
             lr.setLearningRate(0.25);
